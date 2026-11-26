@@ -1,503 +1,581 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BookLab Readers – Hành trình Dấu Chân Sách</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dấu Chân Sách - Sổ Liên Lạc Điện Tử &amp; Hành Trình Đọc BookLab</title>
 
-  <!-- TailwindCSS CDN -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Baloo 2 (Tiêu đề Sketchnote) & Nunito (Nội dung dễ đọc) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
+  <!-- Font Awesome & Google Fonts (Storybook & Color Painting Aesthetic) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Patrick+Hand&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            display: ['"Baloo 2"', 'cursive', 'sans-serif'],
-            body: ['"Nunito"', 'sans-serif'],
-          },
           colors: {
-            paper: '#FFFDF7',
-            ink: '#2D3436',
-            honey: '#FFC83D',
-            honeySoft: '#FFF8E1',
-            mint: '#4ECDC4',
-            coral: '#FF6B6B',
-            unlitBg: '#EAECEF',
-            unlitLine: '#95A5A6',
+            storybook: {
+              cream: '#FFFDF7',
+              parchment: '#F6EEDF',
+              warmYellow: '#FFD54F',
+              amberDark: '#D97706',
+              sageLight: '#E8F5E9',
+              sageDark: '#4CAF50',
+              skyLight: '#E0F7FA',
+              skyDark: '#00BCD4',
+              indigoLight: '#E8EAF6',
+              indigoDark: '#3F51B5',
+              rosePastel: '#FFE4E6',
+              coral: '#E07A5F',
+              vintageNavy: '#2C3E50',
+              barkBrown: '#5C4033'
+            },
+            level: {
+              l1: '#FFC107', // Explorer - Vàng
+              l2: '#00BCD4', // Builder - Xanh da trời
+              l3: '#3F51B5', // Tracker - Xanh dương
+              l4: '#4CAF50'  // Researcher - Xanh lá
+            }
+          },
+          fontFamily: {
+            hand: ['Patrick Hand', 'cursive'],
+            display: ['Comfortaa', 'cursive'],
+            sans: ['Quicksand', 'sans-serif']
           },
           boxShadow: {
-            sketch: '3px 3px 0px #2D3436',
-            sketchLg: '5px 5px 0px #2D3436',
-            glow: '0 0 0 3px #FFC83D, 4px 5px 0px rgba(45, 52, 54, 0.25)',
-          },
-        },
-      },
-    };
+            sketch: '3.5px 4px 0px 0px #2C3E50',
+            sketchSm: '2px 2px 0px 0px #2C3E50',
+            sketchLg: '6px 8px 0px 0px #2C3E50',
+            glowYellow: '0 0 18px rgba(255, 193, 7, 0.65)',
+            glowGreen: '0 0 18px rgba(76, 175, 80, 0.65)'
+          }
+        }
+      }
+    }
   </script>
 
   <style>
     body {
-      font-family: 'Nunito', sans-serif;
       background-color: #FFFDF7;
-      color: #2D3436;
-      background-image: radial-gradient(#e6dfd1 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-
-    h1, h2, h3, h4, .font-sketch {
-      font-family: 'Baloo 2', cursive, sans-serif;
+      background-image: radial-gradient(#E8DEC8 1.3px, transparent 1.3px);
+      background-size: 22px 22px;
+      color: #2C3E50;
+      font-family: 'Quicksand', sans-serif;
     }
 
     .sketch-card {
-      background: #ffffff;
-      border: 2px solid #2D3436;
-      box-shadow: 3px 3px 0px #2D3436;
-      border-radius: 18px;
+      border: 2.5px solid #2C3E50;
+      border-radius: 22px;
+      background-color: #FFFFFF;
+      box-shadow: 3.5px 4px 0px 0px #2C3E50;
     }
 
     .sketch-btn {
-      border: 2px solid #2D3436;
-      box-shadow: 2px 2px 0px #2D3436;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+      border: 2.5px solid #2C3E50;
+      box-shadow: 3px 3px 0px 0px #2C3E50;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    .sketch-btn:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0px #2D3436;
-    }
-
     .sketch-btn:active {
       transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #2D3436;
+      box-shadow: 1px 1px 0px 0px #2C3E50;
     }
 
-    /* Thẻ Dấu Chân: Sáng đèn vs Đen trắng */
-    .footprint-lit {
-      background: linear-gradient(135deg, #FFFDF5 0%, #FFF3C4 100%);
-      border: 2.5px solid #2D3436;
-      box-shadow: 0 0 0 3px rgba(255, 200, 61, 0.55), 4px 4px 0px #2D3436;
+    /* Winding Footprint Path Line Animation */
+    .footprint-path-line {
+      stroke-dasharray: 8, 12;
+      animation: footprintWalk 25s linear infinite;
+    }
+    @keyframes footprintWalk {
+      to { stroke-dashoffset: -500; }
     }
 
-    .footprint-unlit {
-      background: #EAECEF;
-      border: 2px dashed #95A5A6;
-      box-shadow: 2px 2px 0px rgba(149, 165, 166, 0.45);
+    /* Sách đã làm report (Sáng đèn) vs chưa làm (Đen trắng) */
+    .paw-card {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+    }
+    .paw-card:hover {
+      transform: scale(1.03) rotate(-1deg);
+    }
+    .book-lit {
+      background: linear-gradient(135deg, #FFFDF5 0%, #FFE082 100%);
+      border: 2.5px solid #2C3E50;
+      box-shadow: 0 0 16px rgba(255, 193, 7, 0.7), 3.5px 4px 0px 0px #2C3E50;
+    }
+    .book-unlit {
+      background-color: #ECEFF1;
+      border: 2px dashed #78909C;
       filter: grayscale(100%);
-      opacity: 0.82;
+      opacity: 0.78;
+      box-shadow: 2px 2px 0px 0px #90A4AE;
     }
-
-    .footprint-unlit:hover {
-      filter: grayscale(45%);
+    .book-unlit:hover {
+      filter: grayscale(40%);
       opacity: 1;
-      transform: translateY(-3px);
       border-style: solid;
-      border-color: #2D3436;
-      box-shadow: 3px 4px 0px #2D3436;
+      border-color: #2C3E50;
     }
 
-    .trail-connector {
-      border-left: 3px dashed #cbd5e1;
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.94) translateY(8px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .animate-pop {
-      animation: popIn 0.22s ease-out forwards;
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F6EEDF; }
+    ::-webkit-scrollbar-thumb { background: #D97706; border-radius: 10px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="max-w-md mx-auto min-h-screen relative shadow-2xl border-x-4 border-storybook-vintageNavy bg-storybook-cream">
 
-  <!-- TOP BAR: HỒ SƠ READER, TIẾN ĐỘ & VÍ B-COINS -->
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b-2 border-ink">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <!-- Thông tin Reader -->
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-honey border-2 border-ink shadow-sketch flex items-center justify-center text-2xl select-none">
-          🧭
-        </div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span id="readerGreeting" class="font-sketch text-lg md:text-xl font-bold text-ink">
-              Xin chào, Reader!
-            </span>
-            <span id="readerLevelBadge" class="px-2.5 py-0.5 text-xs font-extrabold rounded-full bg-mint/30 border border-ink text-ink">
-              L1 · Explorer
-            </span>
-            <span id="readerStationBadge" class="hidden sm:inline-block px-2 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-              Trạm BookLab
-            </span>
-          </div>
-          <!-- Thanh tiến độ hành trình -->
-          <div class="flex items-center gap-2 mt-1">
-            <div class="w-36 sm:w-48 h-3.5 bg-slate-100 rounded-full border border-ink overflow-hidden">
-              <div id="progressBarFill" class="h-full bg-mint transition-all duration-500" style="width: 0%;"></div>
-            </div>
-            <span id="progressText" class="text-xs font-extrabold text-slate-700">0/0 Dấu chân (0%)</span>
-          </div>
-        </div>
+  <!-- ================= MÀN HÌNH 1: ĐĂNG NHẬP / ĐĂNG KÝ THÀNH VIÊN MỚI ================= -->
+  <section id="authScreen" class="min-h-screen p-5 flex flex-col justify-between items-center relative z-50 bg-storybook-parchment">
+    <!-- Header Branding -->
+    <div class="text-center mt-5 space-y-2">
+      <div class="w-20 h-20 bg-storybook-warmYellow rounded-3xl sketch-card mx-auto flex items-center justify-center text-4xl shadow-sketchLg animate-bounce">
+        🐾
       </div>
-
-      <!-- Ví B-coins & Nút thao tác -->
-      <div class="flex items-center gap-2.5 flex-wrap">
-        <div class="bg-honeySoft border-2 border-ink rounded-2xl px-3.5 py-1.5 shadow-sketch flex items-center gap-2.5">
-          <span class="text-xl">🪙</span>
-          <div>
-            <div class="text-sm font-extrabold leading-tight text-ink" id="walletBcoins">0 B-coins</div>
-            <div class="text-[11px] font-bold text-emerald-700 leading-tight" id="walletVnd">≈ 0 VNĐ (1 xu = 5đ)</div>
-          </div>
-        </div>
-
-        <button
-          id="btnRefreshData"
-          onclick="syncFromSheet(true)"
-          title="Đồng bộ dữ liệu mới nhất từ Google Sheet"
-          class="sketch-btn bg-white hover:bg-slate-50 text-ink font-bold text-xs px-3 py-2 rounded-xl flex items-center gap-1.5"
-        >
-          <span id="refreshIcon">🔄</span>
-          <span class="hidden md:inline">Đồng bộ</span>
-        </button>
-
-        <button
-          id="btnSwitchUser"
-          onclick="openLoginModal()"
-          class="sketch-btn bg-mint/40 hover:bg-mint/60 text-ink font-extrabold text-xs px-3 py-2 rounded-xl"
-        >
-          Đổi Reader
-        </button>
+      <h1 class="font-display font-extrabold text-xl text-storybook-vintageNavy tracking-tight">DẤU CHÂN SÁCH</h1>
+      <p class="font-hand text-lg font-bold text-amber-700">Sổ Liên Lạc Điện Tử &amp; Hành Trình Đọc BookLab</p>
+      <div id="authSyncStatus" class="inline-flex items-center space-x-1.5 bg-white px-3 py-1 rounded-full border border-storybook-vintageNavy text-[10px] font-bold text-sky-700">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="authSyncText">Đang kết nối cơ sở dữ liệu BookLab...</span>
       </div>
     </div>
-  </header>
 
-  <!-- CTA BANNER THÔNG BÁO TỰ ĐỘNG (KHÔNG LƯU LỊCH SỬ) -->
-  <div id="ctaBannerContainer" class="max-w-7xl w-full mx-auto px-4 pt-4 hidden">
-    <div id="ctaBannerBox" class="rounded-2xl border-2 border-ink shadow-sketch px-4 py-3 flex items-center justify-between gap-3 bg-coral/15 animate-pop">
-      <div class="flex items-center gap-3">
-        <span id="ctaBannerIcon" class="text-2xl">📣</span>
+    <!-- Card Đăng nhập / Đăng ký -->
+    <div class="w-full sketch-card p-5 shadow-sketchLg bg-white my-auto space-y-4">
+      <div class="flex justify-around border-b-2 border-storybook-vintageNavy pb-2 text-xs font-bold">
+        <button type="button" onclick="toggleAuthTab('login')" id="tabBtnLogin" class="text-amber-600 border-b-2 border-amber-600 pb-1">
+          <i class="fa-solid fa-right-to-bracket mr-1"></i> Đăng Nhập
+        </button>
+        <button type="button" onclick="toggleAuthTab('register')" id="tabBtnRegister" class="text-gray-400 pb-1">
+          <i class="fa-solid fa-user-plus mr-1"></i> Đăng Ký Mới
+        </button>
+      </div>
+
+      <!-- FORM ĐĂNG NHẬP -->
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
         <div>
-          <div id="ctaBannerTitle" class="font-sketch font-bold text-base text-ink">Thông báo mới từ BookLab!</div>
-          <div id="ctaBannerDesc" class="text-xs sm:text-sm font-semibold text-slate-700"></div>
+          <label class="text-[11px] font-bold text-storybook-vintageNavy">Tên đăng nhập (User_Name), Mã Reader hoặc SĐT:</label>
+          <input type="text" id="loginUserKey" required placeholder="Nhập User_Name, ID_Reader hoặc SĐT..." class="w-full text-xs p-2.5 sketch-card border-gray-400 focus:border-amber-500 outline-none">
         </div>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <button id="ctaBannerActionBtn" class="sketch-btn bg-honey text-ink font-extrabold text-xs px-3 py-1.5 rounded-xl">
-          Khám phá ngay
-        </button>
-        <button onclick="dismissCtaBanner()" class="text-slate-600 hover:text-ink font-bold px-2 py-1 text-sm" title="Đóng">
-          ✕
-        </button>
-      </div>
-    </div>
-  </div>
+        <div>
+          <label class="text-[11px] font-bold text-storybook-vintageNavy">Mật khẩu (Password):</label>
+          <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." class="w-full text-xs p-2.5 sketch-card border-gray-400 focus:border-amber-500 outline-none">
+        </div>
 
-  <!-- MAIN WORKSPACE: 68% BẢN ĐỒ DẤU CHÂN | 32% READING TOUR & GỢI Ý -->
-  <main class="max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+        <div id="loginAlertBox" class="hidden p-2 rounded-xl bg-rose-50 border border-coral text-[11px] font-bold text-coral"></div>
 
-    <!-- CỘT TRÁI (8/12 ~ 67%): BẢN ĐỒ LỘ TRÌNH DẤU CHÂN SÁCH -->
-    <section class="lg:col-span-8 space-y-4">
-      <div class="sketch-card p-4 md:p-5">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b-2 border-dashed border-slate-200">
+        <!-- Danh sách tài khoản lấy từ CSDL để chọn nhanh -->
+        <div id="sampleUsersBox" class="p-2.5 bg-amber-50 rounded-xl border border-amber-300 text-[10px] space-y-1.5">
+          <p class="font-bold text-amber-800"><i class="fa-solid fa-users text-amber-600 mr-1"></i> Chọn nhanh Reader từ Google Sheet:</p>
+          <div id="sampleUsersChips" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+            <span class="text-gray-500 italic">Đang tải danh sách thành viên...</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-storybook-warmYellow sketch-btn py-3 text-xs font-bold text-storybook-vintageNavy uppercase tracking-wider flex items-center justify-center space-x-2">
+          <span>Vào Hành Trình Đọc</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <!-- FORM ĐĂNG KÝ THÀNH VIÊN MỚI (MẶC ĐỊNH LEVEL 1 - EXPLORER) -->
+      <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-2.5 hidden">
+        <div>
+          <label class="text-[11px] font-bold text-storybook-vintageNavy">Họ và Tên Reader (Full_Name) *:</label>
+          <input type="text" id="regFullName" required placeholder="Ví dụ: Nguyễn Minh Khôi" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
           <div>
-            <h1 class="font-sketch text-2xl font-extrabold text-ink flex items-center gap-2">
-              <span>👣 Bản đồ Hành trình Dấu Chân Sách</span>
-            </h1>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium mt-0.5">
-              Sách <strong>sáng đèn</strong> là sách bạn đã hoàn thành Reading Report. Nhấn vào từng dấu chân để viết report &amp; nhận B-coins!
-            </p>
+            <label class="text-[11px] font-bold text-storybook-vintageNavy">Tên đăng nhập *:</label>
+            <input type="text" id="regUserName" required placeholder="VD: minhkhoi" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
           </div>
-          <div id="apiStatusPill" class="self-start md:self-center inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="apiStatusText">Sẵn sàng kết nối Sheet</span>
+          <div>
+            <label class="text-[11px] font-bold text-storybook-vintageNavy">Năm sinh:</label>
+            <input type="number" id="regBirthYear" placeholder="2016" min="2005" max="2023" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
           </div>
         </div>
-
-        <!-- Bộ lọc tối giản & thông minh -->
-        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="setStatusFilter('ALL')" id="filter-ALL" class="filter-chip sketch-btn bg-honey text-ink font-extrabold text-xs px-3.5 py-1.5 rounded-xl">
-              Tất cả (<span id="countAll">0</span>)
-            </button>
-            <button onclick="setStatusFilter('LIT')" id="filter-LIT" class="filter-chip sketch-btn bg-white text-ink font-bold text-xs px-3.5 py-1.5 rounded-xl">
-              ✨ Sáng đèn (<span id="countLit">0</span>)
-            </button>
-            <button onclick="setStatusFilter('UNLIT')" id="filter-UNLIT" class="filter-chip sketch-btn bg-white text-ink font-bold text-xs px-3.5 py-1.5 rounded-xl">
-              ⬜ Đen trắng (<span id="countUnlit">0</span>)
-            </button>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[11px] font-bold text-storybook-vintageNavy">SĐT Phụ huynh *:</label>
+            <input type="tel" id="regPhone" required placeholder="098xxxxxxx" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
           </div>
-
-          <div class="flex items-center gap-2 flex-1 sm:flex-initial">
-            <input
-              type="text"
-              id="searchBookInput"
-              oninput="renderFootprintMap()"
-              placeholder="🔍 Tìm tên sách..."
-              class="w-full sm:w-40 text-xs font-semibold px-3 py-1.5 rounded-xl border-2 border-ink bg-paper focus:outline-none focus:ring-2 focus:ring-honey"
-            />
-            <select
-              id="categoryFilter"
-              onchange="renderFootprintMap()"
-              class="text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-ink bg-paper focus:outline-none focus:ring-2 focus:ring-honey"
-            >
-              <option value="ALL">📚 Mọi thể loại</option>
+          <div>
+            <label class="text-[11px] font-bold text-storybook-vintageNavy">Trạm BookLab:</label>
+            <select id="regStation" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
+              <option value="BookLab SENDA">BookLab SENDA</option>
+              <option value="Trạm Bình Yên">Trạm Bình Yên</option>
+              <option value="BookLab Hạnh phúc">BookLab Hạnh phúc</option>
+              <option value="BookLab Eduee">BookLab Eduee</option>
             </select>
           </div>
         </div>
+        <div>
+          <label class="text-[11px] font-bold text-storybook-vintageNavy">Tên Phụ huynh (Parents_Name):</label>
+          <input type="text" id="regParentsName" placeholder="Họ tên bố/mẹ đồng hành" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-storybook-vintageNavy">Mật khẩu đăng nhập *:</label>
+          <input type="password" id="regPassword" required placeholder="••••••••" class="w-full text-xs p-2 sketch-card border-gray-400 outline-none">
+        </div>
 
-        <!-- Vùng hiển thị lộ trình dấu chân -->
-        <div id="footprintContainer" class="mt-6 space-y-4">
-          <div class="text-center py-10 text-slate-500 font-bold text-sm">
-            Đang tải dữ liệu lộ trình dấu chân từ Google Sheet...
+        <div class="p-2 bg-amber-50 border border-amber-300 rounded-xl text-[10px] font-bold text-amber-900">
+          🌟 Thành viên mới đăng ký tự động khởi tạo ở <span class="underline">Level 1 - Explorer</span> và ghi trực tiếp vào Google Sheet!
+        </div>
+
+        <button id="btnSubmitRegister" type="submit" class="w-full bg-storybook-sageDark sketch-btn py-2.5 text-xs font-bold text-white uppercase tracking-wider">
+          <i class="fa-solid fa-user-check mr-1"></i> Đăng Ký Thành Viên L1 - Explorer
+        </button>
+      </form>
+    </div>
+
+    <div class="text-center text-[10px] text-gray-500 mt-3 mb-1">
+      © 2026 BookLab Readers • Quy đổi thù lao: 1 B-coin = 5 VNĐ
+    </div>
+  </section>
+
+  <!-- ================= MÀN HÌNH 2: DASHBOARD CHÍNH SAU KHI ĐĂNG NHẬP ================= -->
+  <div id="mainDashboard" class="hidden pb-24 pt-20">
+
+    <!-- TOP BAR CỐ ĐỊNH -->
+    <header class="fixed top-0 left-0 right-0 max-w-md mx-auto bg-storybook-parchment border-b-4 border-storybook-vintageNavy z-40 px-3.5 py-2.5 flex items-center justify-between shadow-md">
+      <!-- Hồ sơ Reader -->
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="openProfileModal()">
+        <div class="relative shrink-0">
+          <img id="topAvatarImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=BookLab" alt="Avatar" class="w-11 h-11 rounded-full border-2 border-storybook-vintageNavy bg-white shadow-sketchSm object-cover">
+          <span id="topLevelBadge" class="absolute -bottom-1 -right-1 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-storybook-vintageNavy bg-level-l1">L1</span>
+        </div>
+        <div class="min-w-0">
+          <h3 id="topUserName" class="font-display font-bold text-xs text-storybook-vintageNavy leading-tight truncate">
+            Reader BookLab
+          </h3>
+          <p id="topLevelTitle" class="text-[11px] font-bold text-amber-700 truncate">L1 - Explorer 🧭</p>
+        </div>
+      </div>
+
+      <!-- Nút Đồng bộ, Thông báo CTA & Đăng xuất -->
+      <div class="flex items-center space-x-1.5 shrink-0">
+        <button onclick="syncDatabase(true)" title="Đồng bộ dữ liệu mới từ Google Sheet" class="w-9 h-9 bg-storybook-skyLight sketch-btn rounded-xl flex items-center justify-center text-storybook-vintageNavy">
+          <i id="syncIcon" class="fa-solid fa-rotate text-sm"></i>
+        </button>
+
+        <button onclick="toggleNotifDropdown()" title="Thông báo thay đổi mới" class="relative w-9 h-9 bg-storybook-rosePastel sketch-btn rounded-xl flex items-center justify-center text-storybook-vintageNavy">
+          <i class="fa-solid fa-bell text-sm"></i>
+          <span id="notifBadgeCount" class="hidden absolute -top-1 -right-1 bg-coral text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-storybook-vintageNavy">0</span>
+        </button>
+
+        <button onclick="handleLogout()" title="Đăng xuất" class="w-9 h-9 bg-white sketch-btn rounded-xl flex items-center justify-center text-coral">
+          <i class="fa-solid fa-right-from-bracket text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- TRUNG TÂM THÔNG BÁO TỰ ĐỘNG (STATELESS - KHÔNG LƯU CSDL) -->
+    <div id="notifDropdown" class="hidden fixed top-16 right-4 max-w-xs w-80 bg-white sketch-card z-50 p-4 shadow-sketchLg">
+      <div class="flex justify-between items-center border-b-2 border-storybook-vintageNavy pb-2 mb-2.5">
+        <h4 class="font-display font-bold text-storybook-vintageNavy text-xs">
+          <i class="fa-solid fa-bullhorn text-amber-500 mr-1.5"></i> Thông Báo Nhiệm Vụ Mới
+        </h4>
+        <button onclick="toggleNotifDropdown()" class="text-xs text-gray-500 font-bold">✕</button>
+      </div>
+      <div id="notifListContainer" class="space-y-2 max-h-64 overflow-y-auto pr-1 text-xs">
+        <p class="text-gray-500 text-center py-3">Chưa có biến động mới trong phiên này.</p>
+      </div>
+    </div>
+
+    <!-- BANNER CTA NỔI KHI CÓ THAY ĐỔI MỚI (SÁCH MỚI / TOUR MỚI / TĂNG BCOINS) -->
+    <div id="liveCtaToast" class="hidden mx-3.5 mt-3 p-3 bg-storybook-rosePastel sketch-card shadow-sketch flex items-start justify-between gap-2">
+      <div class="flex items-start space-x-2">
+        <span id="liveCtaIcon" class="text-xl leading-none mt-0.5">📣</span>
+        <div>
+          <h4 id="liveCtaTitle" class="font-display font-bold text-xs text-storybook-vintageNavy">Tin mới từ BookLab!</h4>
+          <p id="liveCtaBody" class="text-[11px] font-semibold text-gray-700 mt-0.5"></p>
+        </div>
+      </div>
+      <button onclick="document.getElementById('liveCtaToast').classList.add('hidden')" class="text-xs font-bold text-gray-600 px-1">✕</button>
+    </div>
+
+    <!-- THẺ TIẾN ĐỘ CHINH PHỤC & VÍ THÙ LAO B-COINS -->
+    <section class="p-3.5 space-y-3">
+      <!-- Tiến độ chinh phục lộ trình đọc -->
+      <div class="bg-storybook-warmYellow/90 sketch-card p-3.5 shadow-sketch">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="bg-white text-storybook-vintageNavy font-bold text-[10px] uppercase px-2.5 py-0.5 rounded-full border border-storybook-vintageNavy">
+            <i class="fa-solid fa-shoe-prints text-amber-600 mr-1"></i> Tiến Độ Hành Trình
+          </span>
+          <span id="progressPercentBadge" class="bg-storybook-sageDark text-white text-[10px] font-bold px-2 py-0.5 rounded-lg border border-storybook-vintageNavy">
+            0%
+          </span>
+        </div>
+
+        <div class="w-full h-4 bg-white rounded-full border-2 border-storybook-vintageNavy overflow-hidden my-1.5">
+          <div id="progressBarFill" class="h-full bg-storybook-sageDark transition-all duration-500" style="width: 0%;"></div>
+        </div>
+
+        <p class="text-xs font-bold text-storybook-vintageNavy flex justify-between">
+          <span>Đã sáng đèn: <strong id="litBooksCountText" class="text-emerald-800">0 cuốn</strong></span>
+          <span>Tổng lộ trình: <strong id="totalBooksCountText">0 cuốn</strong></span>
+        </p>
+      </div>
+
+      <!-- Ví Thù Lao Độc Giả (1 B-coin = 5 VNĐ) -->
+      <div class="bg-storybook-skyLight sketch-card p-3.5 shadow-sketch flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 bg-storybook-warmYellow rounded-2xl border-2 border-storybook-vintageNavy shadow-sketchSm flex items-center justify-center text-xl">
+            🪙
+          </div>
+          <div>
+            <p class="text-[10px] font-bold text-gray-600 uppercase tracking-wider">Ví B-coins &amp; Thù Lao Đọc</p>
+            <h3 id="bcoinsDisplay" class="font-display font-extrabold text-base text-storybook-vintageNavy leading-none">
+              0 <span class="text-xs font-bold text-amber-600">B-coins</span>
+            </h3>
+            <p id="vndDisplay" class="text-xs font-bold text-sky-800 mt-0.5">
+              ≈ 0 VNĐ <span class="text-[10px] text-gray-600 font-normal">(1 B-coin = 5 VNĐ)</span>
+            </p>
           </div>
         </div>
+        <button onclick="switchTab('tab2')" class="bg-white sketch-btn text-[11px] font-bold px-2.5 py-2 text-storybook-vintageNavy hover:bg-storybook-warmYellow">
+          Lịch Tour 📅
+        </button>
       </div>
     </section>
 
-    <!-- CỘT PHẢI (4/12 ~ 33%): READING TOUR SẮP DIỄN RA & BÍ KÍP B-COINS -->
-    <aside class="lg:col-span-4 space-y-5">
-      <!-- Lịch Reading Tour Sắp Diễn Ra -->
-      <div class="sketch-card p-4 md:p-5 bg-white">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="font-sketch text-xl font-extrabold text-ink flex items-center gap-2">
-            <span>🎫 Reading Tour Sắp Diễn Ra</span>
-          </h2>
-          <span id="upcomingTourCount" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-coral/20 text-coral border border-coral/40">
-            0 tour
+    <!-- NỘI DUNG CÁC TAB -->
+    <main class="px-3.5 pb-4">
+
+      <!-- TAB 1: LỘ TRÌNH DẤU CHÂN SÁCH (SẮP XẾP THEO SEQUENCE_ORDER) -->
+      <div id="tab1" class="tab-content space-y-3.5">
+        <div class="bg-storybook-parchment sketch-card p-3 text-center relative shadow-sketch">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white font-bold text-[11px] px-3 py-0.5 rounded-full border border-storybook-vintageNavy shadow-sketchSm">
+            🐾 CON ĐƯỜNG DẤU CHÂN SÁCH
           </span>
-        </div>
-        <p class="text-xs text-slate-600 font-semibold mb-3">
-          Ghé Trạm BookLab tham gia hoạt động để nhận thêm B-coins &amp; giao lưu cùng bạn đọc!
-        </p>
+          <p class="text-[11px] text-storybook-vintageNavy font-semibold mt-1">
+            Sách <strong>sáng đèn</strong> là sách đã làm Report. Nhấn vào từng dấu chân để viết Report &amp; nhận B-coins!
+          </p>
 
-        <div id="upcomingToursList" class="space-y-3">
-          <div class="text-xs text-slate-400 font-semibold py-4 text-center">
-            Đang trích xuất lịch tour...
-          </div>
-        </div>
-      </div>
-
-      <!-- Thẻ Bí Kíp Săn B-coins (Sketchnote Note) -->
-      <div class="sketch-card p-4 md:p-5 bg-honeySoft">
-        <h3 class="font-sketch text-lg font-extrabold text-ink flex items-center gap-2 mb-2">
-          <span>💡 Bí Kíp Tích B-coins Nhanh</span>
-        </h3>
-        <ul class="space-y-2 text-xs sm:text-sm font-semibold text-slate-700">
-          <li class="flex items-start gap-2">
-            <span class="text-base leading-none mt-0.5">🌟</span>
-            <span>Đạt <strong>≥ 85 điểm</strong>: Nhận <strong>100% xu gốc + thưởng thêm 5 B-coins</strong> tư duy xuất sắc!</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-base leading-none mt-0.5">✍️</span>
-            <span>Viết đủ 4 phần &amp; nêu rõ cảm xúc/lý do/bằng chứng để tối ưu điểm chấm tự động.</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-base leading-none mt-0.5">💰</span>
-            <span>Quy đổi minh bạch: <strong>1 B-coin = 5 VNĐ</strong> trên hành trình rèn thói quen đọc.</span>
-          </li>
-        </ul>
-      </div>
-    </aside>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="border-t-2 border-ink bg-white py-4 mt-8">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-bold text-slate-600">
-      <div>BookLab Readers · Hệ thống Dấu Chân Sách (Sketchnote Edition)</div>
-      <div>Đồng bộ trực tiếp Google Sheet qua Apps Script API</div>
-    </div>
-  </footer>
-
-  <!-- MODAL 1: ĐĂNG NHẬP / CHỌN READER -->
-  <div id="loginModal" class="fixed inset-0 z-50 bg-ink/50 backdrop-blur-[2px] hidden items-center justify-center p-4">
-    <div class="sketch-card max-w-md w-full p-6 bg-white animate-pop">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-sketch text-2xl font-extrabold text-ink">🎒 Vào Hành Trình Dấu Chân</h2>
-        <button onclick="closeLoginModal()" class="text-slate-500 hover:text-ink font-extrabold text-lg">✕</button>
-      </div>
-      <p class="text-xs sm:text-sm text-slate-600 font-semibold mb-4">
-        Nhập tên đăng nhập của Reader (hoặc chọn nhanh tài khoản mẫu để xem lộ trình).
-      </p>
-
-      <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-700 mb-1">Tên đăng nhập (User_Name)</label>
-          <input
-            type="text"
-            id="loginUsername"
-            required
-            placeholder="VD: minh_khoi hoặc R001"
-            class="w-full px-3.5 py-2 rounded-xl border-2 border-ink bg-paper text-sm font-bold focus:outline-none focus:ring-2 focus:ring-honey"
-          />
-        </div>
-        <div>
-          <label class="block text-xs font-extrabold uppercase tracking-wide text-slate-700 mb-1">Mật khẩu (Password)</label>
-          <input
-            type="password"
-            id="loginPassword"
-            placeholder="Nhập mật khẩu (nếu có)"
-            class="w-full px-3.5 py-2 rounded-xl border-2 border-ink bg-paper text-sm font-bold focus:outline-none focus:ring-2 focus:ring-honey"
-          />
-        </div>
-
-        <div id="loginErrorMsg" class="text-xs font-bold text-coral hidden"></div>
-
-        <button type="submit" class="w-full sketch-btn bg-honey text-ink font-extrabold py-2.5 rounded-xl text-sm">
-          🚀 Bắt đầu khám phá
-        </button>
-      </form>
-
-      <div id="quickReadersBox" class="mt-4 pt-3 border-t border-dashed border-slate-300 hidden">
-        <div class="text-[11px] font-extrabold text-slate-500 mb-2">CHỌN NHANH READER TRONG CSDL:</div>
-        <div id="quickReadersList" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL 2: CHI TIẾT SÁCH & LÀM READING REPORT + CHẤM ĐIỂM TỰ ĐỘNG -->
-  <div id="reportModal" class="fixed inset-0 z-50 bg-ink/55 backdrop-blur-[2px] hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="sketch-card max-w-2xl w-full p-5 sm:p-6 bg-paper my-auto animate-pop max-h-[92vh] overflow-y-auto">
-      <div class="flex items-start justify-between gap-3 pb-3 border-b-2 border-dashed border-slate-200">
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span id="modalBookId" class="px-2.5 py-0.5 rounded-lg bg-honey border border-ink text-xs font-extrabold">B1</span>
-            <span id="modalBookCategory" class="px-2.5 py-0.5 rounded-lg bg-mint/30 border border-ink text-xs font-extrabold">Địa lý</span>
-            <span id="modalBookLevel" class="px-2.5 py-0.5 rounded-lg bg-slate-100 border border-ink text-xs font-extrabold">Level L1</span>
-            <span id="modalBookLitStatus" class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold"></span>
-          </div>
-          <h2 id="modalBookTitle" class="font-sketch text-2xl font-extrabold text-ink mt-1.5">Tên cuốn sách</h2>
-        </div>
-        <button onclick="closeReportModal()" class="sketch-btn bg-white text-ink font-extrabold px-2.5 py-1 rounded-xl text-sm">✕</button>
-      </div>
-
-      <!-- Lịch sử bài làm trước đó của Reader cho cuốn sách này (nếu có) -->
-      <div id="previousSubmissionsBox" class="mt-3 p-3 rounded-xl bg-emerald-50 border border-emerald-300 hidden">
-        <div class="text-xs font-extrabold text-emerald-900 mb-1">✨ Bạn đã có bài report cho cuốn sách này:</div>
-        <div id="previousSubmissionsList" class="text-xs text-emerald-800 font-semibold space-y-1"></div>
-      </div>
-
-      <!-- Form Làm Reading Report -->
-      <form id="reportForm" onsubmit="handleReportSubmit(event)" class="mt-4 space-y-4">
-        <div class="p-3.5 rounded-2xl bg-white border-2 border-ink flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <div class="text-[11px] font-extrabold uppercase text-slate-500">Mẫu phiếu được điều phối</div>
-            <div id="activeTemplateTitle" class="font-sketch text-lg font-extrabold text-ink">RR-01 · Phiếu Khám Phá</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <label for="templateModeSelect" class="text-xs font-bold text-slate-600">Chế độ:</label>
-            <select
-              id="templateModeSelect"
-              onchange="updateActiveTemplateUI()"
-              class="text-xs font-extrabold px-2.5 py-1.5 rounded-xl border-2 border-ink bg-honeySoft focus:outline-none"
-            >
-              <option value="READER">Theo trình độ của bạn</option>
-              <option value="BOOK">Theo trình độ cuốn sách</option>
+          <!-- Bộ lọc tối giản -->
+          <div class="flex items-center justify-between gap-1.5 mt-2.5 pt-2 border-t border-storybook-vintageNavy/20">
+            <div class="flex gap-1">
+              <button onclick="setBookFilter('ALL')" id="btnFilterALL" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-storybook-warmYellow border border-storybook-vintageNavy">Tất cả</button>
+              <button onclick="setBookFilter('LIT')" id="btnFilterLIT" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white border border-gray-400">✨ Sáng đèn</button>
+              <button onclick="setBookFilter('UNLIT')" id="btnFilterUNLIT" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white border border-gray-400">⬜ Chưa đọc</button>
+            </div>
+            <select id="categorySelect" onchange="renderFootprintBooks()" class="text-[10px] font-bold px-2 py-1 rounded-lg bg-white border border-storybook-vintageNavy max-w-[125px]">
+              <option value="ALL">Mọi thể loại</option>
             </select>
           </div>
         </div>
 
-        <!-- 4 Phần câu hỏi động theo REPORT_TEMPLATES -->
-        <div class="space-y-3">
-          <div class="p-3.5 rounded-2xl bg-white border-2 border-ink">
-            <label id="labelSec1" for="ansSec1" class="block text-xs sm:text-sm font-extrabold text-ink mb-1.5">Phần 1</label>
-            <textarea id="ansSec1" rows="2" required oninput="updateCharCounter(this, 'cntSec1')" class="w-full p-2.5 rounded-xl border border-slate-300 bg-paper text-sm font-semibold focus:outline-none focus:border-ink" placeholder="Viết câu trả lời của bạn..."></textarea>
-            <div class="text-right text-[11px] font-bold text-slate-400 mt-1"><span id="cntSec1">0</span> ký tự</div>
-          </div>
+        <!-- Đường đi Dấu Chân Sách nối tiếp nhau -->
+        <div class="relative min-h-[420px] bg-white sketch-card p-3.5 shadow-sketch overflow-hidden">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 360 800" preserveAspectRatio="none" fill="none">
+            <path class="footprint-path-line" d="M 85 40 C 280 90, 280 180, 90 240 C -20 290, 290 360, 260 440 C 230 520, 70 560, 95 650 C 120 720, 260 750, 250 790" stroke="#D97706" stroke-width="4" stroke-linecap="round"/>
+          </svg>
 
-          <div class="p-3.5 rounded-2xl bg-white border-2 border-ink">
-            <label id="labelSec2" for="ansSec2" class="block text-xs sm:text-sm font-extrabold text-ink mb-1.5">Phần 2</label>
-            <textarea id="ansSec2" rows="2" required oninput="updateCharCounter(this, 'cntSec2')" class="w-full p-2.5 rounded-xl border border-slate-300 bg-paper text-sm font-semibold focus:outline-none focus:border-ink" placeholder="Viết câu trả lời của bạn..."></textarea>
-            <div class="text-right text-[11px] font-bold text-slate-400 mt-1"><span id="cntSec2">0</span> ký tự</div>
-          </div>
-
-          <div class="p-3.5 rounded-2xl bg-white border-2 border-ink">
-            <label id="labelSec3" for="ansSec3" class="block text-xs sm:text-sm font-extrabold text-ink mb-1.5">Phần 3</label>
-            <textarea id="ansSec3" rows="2" required oninput="updateCharCounter(this, 'cntSec3')" class="w-full p-2.5 rounded-xl border border-slate-300 bg-paper text-sm font-semibold focus:outline-none focus:border-ink" placeholder="Viết câu trả lời của bạn..."></textarea>
-            <div class="text-right text-[11px] font-bold text-slate-400 mt-1"><span id="cntSec3">0</span> ký tự</div>
-          </div>
-
-          <div class="p-3.5 rounded-2xl bg-white border-2 border-ink">
-            <label id="labelSec4" for="ansSec4" class="block text-xs sm:text-sm font-extrabold text-ink mb-1.5">Phần 4</label>
-            <textarea id="ansSec4" rows="2" required oninput="updateCharCounter(this, 'cntSec4')" class="w-full p-2.5 rounded-xl border border-slate-300 bg-paper text-sm font-semibold focus:outline-none focus:border-ink" placeholder="Viết câu trả lời của bạn..."></textarea>
-            <div class="text-right text-[11px] font-bold text-slate-400 mt-1"><span id="cntSec4">0</span> ký tự</div>
+          <div id="footprintBooksList" class="relative z-10 space-y-4">
+            <p class="text-center text-xs text-gray-500 py-8 font-bold">Đang tải danh mục sách theo Sequence_Order...</p>
           </div>
         </div>
+      </div>
 
-        <!-- Link ảnh sản phẩm sáng tạo (tùy chọn) -->
-        <div class="p-3.5 rounded-2xl bg-white border-2 border-dashed border-slate-400">
-          <label for="mediaUrlInput" class="block text-xs font-extrabold text-slate-700 mb-1">
-            🖼️ Link ảnh vẽ tay / minibook / góc đọc sách (Tùy chọn - Media_URL)
-          </label>
-          <input
-            type="url"
-            id="mediaUrlInput"
-            placeholder="https://drive.google.com/... hoặc link ảnh"
-            class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-paper text-xs sm:text-sm font-semibold focus:outline-none focus:border-ink"
-          />
+      <!-- TAB 2: LỊCH READING TOUR SẮP DIỄN RA -->
+      <div id="tab2" class="tab-content hidden space-y-3.5">
+        <div class="bg-storybook-rosePastel sketch-card p-3.5 text-center shadow-sketch">
+          <h3 class="font-display font-bold text-sm text-storybook-vintageNavy">🎫 READING TOUR SẮP DIỄN RA</h3>
+          <p class="text-[11px] text-storybook-vintageNavy font-semibold mt-0.5">
+            Ghé các Trạm BookLab tham gia tour đọc sách tương tác để săn thêm B-coins!
+          </p>
         </div>
 
-        <!-- Kết quả chấm tự động ngay sau khi nộp -->
-        <div id="gradingResultBox" class="hidden p-4 rounded-2xl bg-honeySoft border-2 border-ink shadow-sketch animate-pop space-y-2">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <span class="font-sketch text-lg font-extrabold text-ink">🎉 Kết quả Chấm Tự Động</span>
-            <span id="gradedScoreBadge" class="px-3 py-1 rounded-full bg-honey border-2 border-ink font-extrabold text-sm">0 / 100 điểm</span>
+        <div id="upcomingToursContainer" class="space-y-3">
+          <p class="text-center text-xs text-gray-500 py-6">Đang trích xuất lịch tour từ CSDL...</p>
+        </div>
+      </div>
+
+      <!-- TAB 3: LỊCH SỬ BÀI REPORT & ĐIỂM SỐ ĐÃ CHẤM -->
+      <div id="tab3" class="tab-content hidden space-y-3.5">
+        <div class="bg-storybook-sageLight sketch-card p-3.5 text-center shadow-sketch">
+          <h3 class="font-display font-bold text-sm text-storybook-vintageNavy">📝 NHẬT KÝ READING REPORT CỦA TÔI</h3>
+          <p class="text-[11px] text-storybook-vintageNavy font-semibold mt-0.5">
+            Tổng hợp các bài báo cáo đọc sách đã nộp và điểm thưởng B-coins tự động
+          </p>
+        </div>
+
+        <div id="myReportsHistoryList" class="space-y-2.5">
+          <p class="text-center text-xs text-gray-500 py-6">Chưa có bài report nào.</p>
+        </div>
+      </div>
+
+      <!-- TAB 4: HỒ SƠ READER & TRẠM ĐỌC -->
+      <div id="tab4" class="tab-content hidden space-y-3.5">
+        <div class="bg-white sketch-card p-4 shadow-sketch space-y-3">
+          <div class="flex items-center space-x-3 border-b-2 border-storybook-vintageNavy pb-3">
+            <img id="tabProfileAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=BookLab" class="w-14 h-14 rounded-full border-2 border-storybook-vintageNavy">
+            <div>
+              <h4 id="tabProfileName" class="font-display font-bold text-sm text-storybook-vintageNavy">Reader</h4>
+              <p id="tabProfileId" class="text-[11px] font-mono text-gray-500">ID_Reader: R001</p>
+              <span id="tabProfileLevel" class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-storybook-warmYellow border border-storybook-vintageNavy">
+                L1 - Explorer
+              </span>
+            </div>
           </div>
-          <div id="gradedBreakdown" class="grid grid-cols-3 gap-2 text-center text-xs font-extrabold"></div>
-          <div id="gradedCoinsLine" class="text-sm font-extrabold text-emerald-700"></div>
-          <p id="gradedFeedbackText" class="text-xs sm:text-sm font-semibold text-slate-700 bg-white p-2.5 rounded-xl border border-amber-300"></p>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between border-b pb-1">
+              <span class="text-gray-500">Trạm sinh hoạt:</span>
+              <span id="tabProfileStation" class="font-bold text-storybook-vintageNavy">BookLab SENDA</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span class="text-gray-500">Phụ huynh:</span>
+              <span id="tabProfileParent" class="font-bold text-storybook-vintageNavy">-</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span class="text-gray-500">Số điện thoại:</span>
+              <span id="tabProfilePhone" class="font-bold text-storybook-vintageNavy">-</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span class="text-gray-500">Số B-coins tích lũy:</span>
+              <span id="tabProfileCoins" class="font-bold text-amber-600">0 B-coins</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Giá trị thù lao đọc:</span>
+              <span id="tabProfileVnd" class="font-bold text-sky-700">0 VNĐ</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-storybook-parchment rounded-2xl border border-storybook-vintageNavy text-[11px] space-y-1">
+            <p class="font-bold text-storybook-vintageNavy"><i class="fa-solid fa-location-dot text-coral mr-1"></i> Hệ thống Trạm Đọc BookLab:</p>
+            <p class="text-gray-700">• Trạm BookLab SENDA: Tòa D19, KĐT Đặng Xá, Gia Lâm, Hà Nội</p>
+            <p class="text-gray-700">• Trạm BookLab Bình Yên: 1381/4 Hùng Vương, Buôn Hồ, Đắk Lắk</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-storybook-parchment border-t-4 border-storybook-vintageNavy z-40 px-2 py-1.5 flex justify-around shadow-lg">
+      <button type="button" onclick="switchTab('tab1')" id="navBtn-tab1" class="flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px] bg-storybook-warmYellow border-2 border-storybook-vintageNavy shadow-sketchSm">
+        <i class="fa-solid fa-shoe-prints text-base mb-0.5"></i>
+        Lộ Trình
+      </button>
+      <button type="button" onclick="switchTab('tab2')" id="navBtn-tab2" class="flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px]">
+        <i class="fa-solid fa-calendar-star fa-calendar-check text-base mb-0.5"></i>
+        Lịch Tour
+      </button>
+      <button type="button" onclick="switchTab('tab3')" id="navBtn-tab3" class="flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px]">
+        <i class="fa-solid fa-book-open-reader text-base mb-0.5"></i>
+        Report Của Tôi
+      </button>
+      <button type="button" onclick="switchTab('tab4')" id="navBtn-tab4" class="flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px]">
+        <i class="fa-solid fa-id-card text-base mb-0.5"></i>
+        Hồ Sơ
+      </button>
+    </nav>
+  </div>
+
+  <!-- ================= MODAL LÀM READING REPORT & CHẤM ĐIỂM TỰ ĐỘNG ================= -->
+  <div id="reportModal" class="hidden fixed inset-0 bg-black/65 z-50 flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-storybook-cream sketch-card w-full max-w-md p-4 shadow-sketchLg space-y-3 max-h-[92vh] overflow-y-auto my-auto">
+      <div class="flex justify-between items-start border-b-2 border-storybook-vintageNavy pb-2 gap-2">
+        <div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span id="modalBookIdTag" class="bg-storybook-warmYellow text-[10px] font-bold px-2 py-0.5 rounded-full border border-storybook-vintageNavy">B1</span>
+            <span id="modalBookCatTag" class="bg-storybook-skyLight text-[10px] font-bold px-2 py-0.5 rounded-full border border-storybook-vintageNavy">Địa lý</span>
+            <span id="modalBookLitBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
+          </div>
+          <h3 id="modalBookTitle" class="font-display font-bold text-sm text-storybook-vintageNavy mt-1">Tên cuốn sách</h3>
+        </div>
+        <button type="button" onclick="closeReportModal()" class="text-xs font-bold bg-white px-2.5 py-1 rounded-xl border-2 border-storybook-vintageNavy">✕</button>
+      </div>
+
+      <!-- Chọn mẫu phiếu theo trình độ -->
+      <div class="p-2.5 bg-storybook-parchment rounded-2xl border-2 border-storybook-vintageNavy flex items-center justify-between gap-2">
+        <div>
+          <p class="text-[10px] font-bold text-gray-600 uppercase">Mẫu phiếu áp dụng:</p>
+          <p id="activeTemplateName" class="font-display font-bold text-xs text-storybook-vintageNavy">RR-01 · Phiếu Khám Phá</p>
+        </div>
+        <select id="templateRoutingSelect" onchange="renderTemplatePrompts()" class="text-[10px] font-bold p-1.5 rounded-xl bg-white border-2 border-storybook-vintageNavy">
+          <option value="READER">Theo trình độ Reader</option>
+          <option value="BOOK">Theo trình độ Sách</option>
+        </select>
+      </div>
+
+      <!-- Form 4 phần câu hỏi -->
+      <form id="readingReportForm" onsubmit="handleReportSubmit(event)" class="space-y-2.5">
+        <div class="bg-white p-2.5 rounded-2xl border-2 border-storybook-vintageNavy">
+          <label id="lblSec1" class="block text-[11px] font-bold text-storybook-vintageNavy mb-1">1. Phần 1</label>
+          <textarea id="inpSec1" rows="2" required placeholder="Nhập câu trả lời của bạn..." class="w-full text-xs p-2 rounded-xl bg-storybook-cream border border-gray-300 outline-none focus:border-amber-500"></textarea>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-2">
-          <button type="button" onclick="closeReportModal()" class="sketch-btn bg-white text-ink font-bold px-4 py-2 rounded-xl text-xs sm:text-sm">
-            Đóng
-          </button>
-          <button id="btnSubmitReport" type="submit" class="sketch-btn bg-mint text-ink font-extrabold px-5 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5">
-            <span>✨ Nộp Report &amp; Chấm Tự Động</span>
+        <div class="bg-white p-2.5 rounded-2xl border-2 border-storybook-vintageNavy">
+          <label id="lblSec2" class="block text-[11px] font-bold text-storybook-vintageNavy mb-1">2. Phần 2</label>
+          <textarea id="inpSec2" rows="2" required placeholder="Nhập câu trả lời của bạn..." class="w-full text-xs p-2 rounded-xl bg-storybook-cream border border-gray-300 outline-none focus:border-amber-500"></textarea>
+        </div>
+
+        <div class="bg-white p-2.5 rounded-2xl border-2 border-storybook-vintageNavy">
+          <label id="lblSec3" class="block text-[11px] font-bold text-storybook-vintageNavy mb-1">3. Phần 3</label>
+          <textarea id="inpSec3" rows="2" required placeholder="Nhập câu trả lời của bạn..." class="w-full text-xs p-2 rounded-xl bg-storybook-cream border border-gray-300 outline-none focus:border-amber-500"></textarea>
+        </div>
+
+        <div class="bg-white p-2.5 rounded-2xl border-2 border-storybook-vintageNavy">
+          <label id="lblSec4" class="block text-[11px] font-bold text-storybook-vintageNavy mb-1">4. Phần 4</label>
+          <textarea id="inpSec4" rows="2" required placeholder="Nhập câu trả lời của bạn..." class="w-full text-xs p-2 rounded-xl bg-storybook-cream border border-gray-300 outline-none focus:border-amber-500"></textarea>
+        </div>
+
+        <div class="bg-white p-2.5 rounded-2xl border border-dashed border-storybook-vintageNavy">
+          <label class="block text-[10px] font-bold text-gray-600 mb-1">🖼️ Link ảnh vẽ tay / góc đọc sách (Tùy chọn):</label>
+          <input type="url" id="inpMediaUrl" placeholder="https://..." class="w-full text-xs p-1.5 rounded-lg bg-storybook-cream border border-gray-300 outline-none">
+        </div>
+
+        <!-- Kết quả chấm tự động -->
+        <div id="autoGradeResultCard" class="hidden p-3 bg-storybook-sageLight rounded-2xl border-2 border-storybook-vintageNavy space-y-1.5">
+          <div class="flex justify-between items-center">
+            <span class="font-display font-bold text-xs text-storybook-vintageNavy">🎉 KẾT QUẢ CHẤM TỰ ĐỘNG</span>
+            <span id="gradeTotalBadge" class="bg-storybook-warmYellow px-2.5 py-0.5 rounded-full border border-storybook-vintageNavy text-xs font-extrabold">0/100đ</span>
+          </div>
+          <p id="gradeDetailLine" class="text-[11px] font-bold text-gray-700"></p>
+          <p id="gradeCoinsRewardLine" class="text-xs font-extrabold text-emerald-700"></p>
+          <p id="gradeMentorNote" class="text-[11px] text-storybook-vintageNavy bg-white p-2 rounded-xl border border-emerald-300"></p>
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button type="button" onclick="closeReportModal()" class="w-1/3 bg-gray-200 sketch-btn py-2.5 text-xs font-bold text-gray-700 rounded-xl">Đóng</button>
+          <button id="btnSaveReport" type="submit" class="w-2/3 bg-storybook-warmYellow sketch-btn py-2.5 text-xs font-bold text-storybook-vintageNavy rounded-xl">
+            ✨ Nộp Report &amp; Nhận B-coins
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 3: POP-UP CHÚC MỪNG KHI NHẬN B-COINS -->
-  <div id="rewardToastModal" class="fixed inset-0 z-50 bg-ink/45 hidden items-center justify-center p-4">
-    <div class="sketch-card max-w-sm w-full p-6 bg-white text-center animate-pop">
-      <div class="text-5xl mb-2">🪙✨</div>
-      <h3 class="font-sketch text-2xl font-extrabold text-ink">Tuyệt vời quá!</h3>
-      <p id="rewardModalText" class="text-sm font-bold text-slate-700 mt-2"></p>
-      <p class="text-xs font-semibold text-emerald-700 mt-1">
-        Ghé ngay Trạm BookLab gần nhất để đổi quà hoặc chinh phục nhiệm vụ mới nhé!
-      </p>
-      <button onclick="closeRewardModal()" class="mt-4 w-full sketch-btn bg-honey text-ink font-extrabold py-2 rounded-xl text-sm">
-        Tiếp tục hành trình!
+  <!-- ================= MODAL HỒ SƠ NHANH KHI BẤM TOP BAR ================= -->
+  <div id="profileModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div class="bg-white sketch-card w-full max-w-xs p-4 shadow-sketchLg space-y-3 text-center">
+      <img id="quickModalAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=BookLab" class="w-16 h-16 rounded-full border-2 border-storybook-vintageNavy mx-auto">
+      <h4 id="quickModalName" class="font-display font-bold text-sm text-storybook-vintageNavy">Reader</h4>
+      <p id="quickModalLevel" class="text-xs font-bold text-amber-700">L1 - Explorer</p>
+      <div class="p-2.5 bg-storybook-parchment rounded-xl border border-storybook-vintageNavy text-xs space-y-1">
+        <div>Số dư: <strong id="quickModalCoins" class="text-amber-700">0 B-coins</strong></div>
+        <div>Thù lao quy đổi: <strong id="quickModalVnd" class="text-sky-700">0 VNĐ</strong></div>
+      </div>
+      <button type="button" onclick="closeProfileModal()" class="w-full bg-storybook-warmYellow sketch-btn py-2 text-xs font-bold text-storybook-vintageNavy rounded-xl">
+        Đóng
       </button>
     </div>
   </div>
 
+  <!-- ================= JAVASCRIPT CORE: ĐỌC / GHI GOOGLE SHEET API ================= -->
   <script>
-    // =========================================================================
-    // 1. CẤU HÌNH API GOOGLE APPS SCRIPT & HẰNG SỐ HỆ THỐNG
-    // =========================================================================
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbyUAurMlu-WJ6haAFlJBVip5Vj75rFUaKlWO9OdCgXFSr39z_7EihmKvPVBK62lKDO8Mw/exec";
-
-    const BCOIN_TO_VND = 5; // 1 B-coin = 5 VNĐ
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyUAurMlu-WJ6haAFlJBVip5Vj75rFUaKlWO9OdCgXFSr39z_7EihmKvPVBK62lKDO8Mw/exec";
+    const BCOIN_RATE_VND = 5; // 1 B-coin = 5 VNĐ
 
     const DEFAULT_LEVELS = [
-      { ID_Level: "L1", Title_Level: "Explorer", Bcoins_Base: 10, "Mô tả": "Khám phá trực quan, nhịp đọc ngắn." },
-      { ID_Level: "L2", Title_Level: "Builder", Bcoins_Base: 15, "Mô tả": "Xây dựng ý chính, cốt truyện và từ vựng." },
-      { ID_Level: "L3", Title_Level: "Tracker", Bcoins_Base: 20, "Mô tả": "Truy vết thời gian, nhân quả và P-E-E-L." },
-      { ID_Level: "L4", Title_Level: "Researcher", Bcoins_Base: 30, "Mô tả": "Phân tích phản biện C-E-R và ứng dụng." }
+      { ID_Level: "L1", Title_Level: "Explorer", Bcoins_Base: 10 },
+      { ID_Level: "L2", Title_Level: "Builder", Bcoins_Base: 15 },
+      { ID_Level: "L3", Title_Level: "Tracker", Bcoins_Base: 20 },
+      { ID_Level: "L4", Title_Level: "Researcher", Bcoins_Base: 30 }
     ];
 
     const DEFAULT_TEMPLATES = [
@@ -505,44 +583,41 @@
         Template_ID: "RR-01",
         Title_Report: "Phiếu Khám Phá Hình Ảnh & Cảm Xúc",
         Target_Level: "L1",
-        Prompt_Section_1: "1. Dấu ấn trang sách: Cảnh vật, con vật, vùng đất hoặc nhân vật em thích nhất là gì?",
-        Prompt_Section_2: "2. 5W1H tinh gọn: Ở đâu? / Ai? / Chuyện gì đã xảy ra?",
-        Prompt_Section_3: "3. Think – Feel – Action: Em nghĩ gì, cảm thấy thế nào và muốn làm gì tiếp theo?",
-        Prompt_Section_4: "4. Từ vựng / Từ khóa bỏ túi: 2–3 từ tiếng Việt hoặc tiếng Anh em nhớ nhất."
+        Prompt_Section_1: "1. Dấu ấn trang sách: Cảnh vật, con vật hoặc nhân vật em thích nhất?",
+        Prompt_Section_2: "2. 5W1H tinh gọn: Ở đâu? / Ai? / Chuyện gì xảy ra?",
+        Prompt_Section_3: "3. Think – Feel – Action: Em nghĩ gì, cảm thấy thế nào và muốn làm gì?",
+        Prompt_Section_4: "4. Từ vựng / Từ khóa bỏ túi: 2–3 từ em nhớ nhất trong sách."
       },
       {
         Template_ID: "RR-02",
         Title_Report: "Phiếu Xây Dựng Cốt Truyện & Từ Khóa",
         Target_Level: "L2",
-        Prompt_Section_1: "1. Bản đồ 5 thành phần: Nhân vật & Bối cảnh – Vấn đề – Giải pháp – Kết quả.",
-        Prompt_Section_2: "2. Ý chính 1 câu: Tóm tắt nội dung chính bằng lời của em.",
-        Prompt_Section_3: "3. Sổ tay từ vựng / cấu trúc: Ghi từ/cụm từ hay, nghĩa và 1 ví dụ mới.",
-        Prompt_Section_4: "4. Góc kết nối kỹ năng: Em học được mẹo hoặc bài học nhỏ nào?"
+        Prompt_Section_1: "1. Bản đồ 5 thành phần: Nhân vật – Bối cảnh – Vấn đề – Giải pháp – Kết quả.",
+        Prompt_Section_2: "2. Ý chính 1 câu: Tóm tắt nội dung sách bằng lời của em.",
+        Prompt_Section_3: "3. Sổ tay từ vựng: Ghi từ/cấu trúc hay, giải nghĩa và đặt 1 ví dụ.",
+        Prompt_Section_4: "4. Góc kết nối kỹ năng: Em học được bài học hoặc mẹo hay nào?"
       },
       {
         Template_ID: "RR-03",
         Title_Report: "Phiếu Truy Vết Dòng Thời Gian & Nhân Quả",
         Target_Level: "L3",
-        Prompt_Section_1: "1. Mốc sự kiện & Bối cảnh: Các bước ngoặt hoặc mốc thời gian chính theo trình tự.",
-        Prompt_Section_2: "2. Sợi dây Nhân – Quả: Nguyên nhân/bối cảnh dẫn đến sự kiện và hệ quả trực tiếp.",
-        Prompt_Section_3: "3. P-E-E-L rút gọn: Phẩm chất/bài học (Point), dẫn chứng (Evidence) và liên hệ (Link).",
-        Prompt_Section_4: "4. Câu hỏi mở rộng: Câu hỏi tư duy em muốn đặt thêm cho nhân vật/sự kiện."
+        Prompt_Section_1: "1. Mốc sự kiện & Bối cảnh: Liệt kê 3–4 bước ngoặt theo trình tự thời gian.",
+        Prompt_Section_2: "2. Sợi dây Nhân – Quả: Nguyên nhân dẫn đến sự kiện & hệ quả trực tiếp.",
+        Prompt_Section_3: "3. P-E-E-L rút gọn: Phẩm chất/bài học (Point), dẫn chứng (Evidence) & liên hệ (Link).",
+        Prompt_Section_4: "4. Câu hỏi mở rộng: Em muốn đặt thêm câu hỏi gì cho nhân vật/sự kiện?"
       },
       {
         Template_ID: "RR-04",
         Title_Report: "Phiếu Nghiên Cứu Phản Biện & Ứng Dụng",
         Target_Level: "L4",
         Prompt_Section_1: "1. Luận điểm (Claim): Thông điệp cốt lõi hoặc góc nhìn phản biện của em.",
-        Prompt_Section_2: "2. Bằng chứng (Evidence): Các dữ kiện, chi tiết hoặc dẫn chứng cụ thể trong sách.",
-        Prompt_Section_3: "3. Lập luận (Reasoning): Giải thích logic nối bằng chứng với luận điểm & tầng ý nghĩa.",
-        Prompt_Section_4: "4. Đối chiếu & Kế hoạch 7 ngày: Góc nhìn đa chiều và 1 hành động áp dụng thực tế."
+        Prompt_Section_2: "2. Bằng chứng (Evidence): Các dữ kiện, trích dẫn cụ thể trong sách.",
+        Prompt_Section_3: "3. Lập luận (Reasoning): Giải thích logic nối bằng chứng với luận điểm.",
+        Prompt_Section_4: "4. Đối chiếu & Kế hoạch 7 ngày: Góc nhìn đa chiều & 1 hành động áp dụng."
       }
     ];
 
-    // =========================================================================
-    // 2. TRẠNG THÁI ỨNG DỤNG (STATE)
-    // =========================================================================
-    let db = {
+    let appDb = {
       READERS: [],
       BOOKS: [],
       LEVEL_READER: [...DEFAULT_LEVELS],
@@ -553,437 +628,508 @@
     };
 
     let currentReader = null;
-    let selectedBook = null;
-    let statusFilter = "ALL"; // ALL | LIT | UNLIT
-    let ctaActionCallback = null;
+    let activeBook = null;
+    let bookStatusFilter = "ALL"; // ALL | LIT | UNLIT
+    let sessionNotifications = [];
 
-    // =========================================================================
-    // 3. KHỞI TẠO & ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET (GET)
-    // =========================================================================
+    // Khởi chạy đồng bộ CSDL ngay khi mở trang
     document.addEventListener("DOMContentLoaded", async () => {
-      restoreSavedReaderSession();
-      await syncFromSheet(false);
+      await syncDatabase(false);
+      restoreSessionIfAny();
     });
 
-    function restoreSavedReaderSession() {
+    // =========================================================================
+    // 1. ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET (GET) & PHÁT HIỆN THAY ĐỔI MỚI
+    // =========================================================================
+    async function syncDatabase(isManualRefresh = false) {
+      const syncIcon = document.getElementById("syncIcon");
+      const authSyncText = document.getElementById("authSyncText");
+      if (syncIcon) syncIcon.classList.add("fa-spin");
+      if (authSyncText) authSyncText.textContent = "Đang đồng bộ dữ liệu từ Google Sheet...";
+
+      // Chụp trạng thái trước khi tải để phát hiện bản ghi mới
+      const prevBookIds = new Set(appDb.BOOKS.map(b => String(b.ID_Book || "").trim()).filter(Boolean));
+      const prevTourIds = new Set(appDb.READING_TOURS.map(t => String(t.Tour_ID || "").trim()).filter(Boolean));
+      const prevBcoins = currentReader ? calculateReaderBcoins(currentReader.ID_Reader) : null;
+
       try {
-        const saved = localStorage.getItem("booklab_current_reader");
-        if (saved) {
-          currentReader = JSON.parse(saved);
+        const res = await fetch(GAS_API_URL, { method: "GET", cache: "no-store" });
+        const json = await res.json();
+        const sheets = json.sheets || json.data || json;
+
+        if (sheets && typeof sheets === "object") {
+          if (Array.isArray(sheets.READERS)) appDb.READERS = sheets.READERS;
+          if (Array.isArray(sheets.BOOKS)) appDb.BOOKS = sheets.BOOKS;
+          if (Array.isArray(sheets.LEVEL_READER) && sheets.LEVEL_READER.length > 0) {
+            appDb.LEVEL_READER = sheets.LEVEL_READER;
+          }
+          if (Array.isArray(sheets.REPORT_TEMPLATES) && sheets.REPORT_TEMPLATES.length > 0) {
+            appDb.REPORT_TEMPLATES = sheets.REPORT_TEMPLATES;
+          }
+          if (Array.isArray(sheets.READING_SESSIONS)) appDb.READING_SESSIONS = sheets.READING_SESSIONS;
+          if (Array.isArray(sheets.REPORT_SUBMISSIONS)) appDb.REPORT_SUBMISSIONS = sheets.REPORT_SUBMISSIONS;
+
+          const toursData = sheets.READING_TOURS || sheets.READING_TOUR_SCHEDULE || [];
+          if (Array.isArray(toursData)) appDb.READING_TOURS = toursData;
+        }
+
+        if (authSyncText) {
+          authSyncText.textContent = `Đã kết nối (${appDb.READERS.length} Readers · ${appDb.BOOKS.length} Sách)`;
+        }
+      } catch (err) {
+        console.warn("Lỗi kết nối GET API:", err);
+        if (authSyncText) authSyncText.textContent = "Chế độ ngoại tuyến / kiểm tra quyền Web App";
+      } finally {
+        if (syncIcon) syncIcon.classList.remove("fa-spin");
+      }
+
+      renderSampleReadersChips();
+
+      if (currentReader) {
+        // Cập nhật lại bản ghi currentReader mới nhất từ CSDL
+        const refreshed = appDb.READERS.find(
+          r => String(r.ID_Reader || "").trim() === String(currentReader.ID_Reader || "").trim()
+        );
+        if (refreshed) {
+          currentReader = refreshed;
+          localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
+        }
+
+        detectDatabaseChanges(prevBookIds, prevTourIds, prevBcoins, isManualRefresh);
+        refreshAllDashboardViews();
+      }
+    }
+
+    function detectDatabaseChanges(prevBookIds, prevTourIds, prevBcoins, isManualRefresh) {
+      let hasNewEvent = false;
+
+      // 1. Kiểm tra thay đổi về B-coins của Reader
+      if (prevBcoins !== null && currentReader) {
+        const nowBcoins = calculateReaderBcoins(currentReader.ID_Reader);
+        if (nowBcoins !== prevBcoins) {
+          const diff = nowBcoins - prevBcoins;
+          const sign = diff > 0 ? "+" : "";
+          pushStatelessNotification(
+            "🪙 Biến động Ví B-coins!",
+            `Số dư B-coins của bạn vừa thay đổi (${sign}${diff} B-coins), hiện đạt ${nowBcoins} B-coins (≈ ${(nowBcoins * BCOIN_RATE_VND).toLocaleString()} VNĐ). Ghé Trạm BookLab làm thêm nhiệm vụ nhé!`
+          );
+          hasNewEvent = true;
+        }
+      }
+
+      // 2. Kiểm tra xuất hiện sách mới trong BOOKS
+      if (prevBookIds.size > 0) {
+        const newBooks = appDb.BOOKS.filter(b => {
+          const id = String(b.ID_Book || "").trim();
+          return id && !prevBookIds.has(id);
+        });
+        newBooks.forEach(nb => {
+          pushStatelessNotification(
+            "📚 Sách mới vừa cập bến!",
+            `Kho BookLab vừa thêm cuốn "${nb.Title_Book || nb.ID_Book}". Mở bản đồ dấu chân để đọc và thắp sáng ngay!`
+          );
+          hasNewEvent = true;
+        });
+      }
+
+      // 3. Kiểm tra lịch tổ chức tour mới trong READING_TOURS
+      if (prevTourIds.size > 0) {
+        const newTours = appDb.READING_TOURS.filter(t => {
+          const id = String(t.Tour_ID || "").trim();
+          return id && !prevTourIds.has(id);
+        });
+        newTours.forEach(nt => {
+          pushStatelessNotification(
+            "🎫 Lịch Reading Tour mới!",
+            `Tour "${nt.Tour_Name || "Sự kiện đọc sách"}" sắp diễn ra tại ${nt.Station_ID || "Trạm BookLab"} (+${nt.Reward_Bcoins || 0} B-coins). Đăng ký tham gia ngay!`
+          );
+          hasNewEvent = true;
+        });
+      }
+
+      if (isManualRefresh && !hasNewEvent) {
+        showLiveCtaBanner("🔄", "Đã đồng bộ dữ liệu mới nhất!", "Kho sách, điểm report và lịch Reading Tour đã được cập nhật từ Google Sheet.");
+      }
+    }
+
+    function pushStatelessNotification(title, body) {
+      sessionNotifications.unshift({
+        title,
+        body,
+        time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
+      });
+      renderNotificationsDropdown();
+      showLiveCtaBanner("📣", title, body);
+    }
+
+    function showLiveCtaBanner(icon, title, body) {
+      document.getElementById("liveCtaIcon").textContent = icon;
+      document.getElementById("liveCtaTitle").textContent = title;
+      document.getElementById("liveCtaBody").textContent = body;
+      document.getElementById("liveCtaToast").classList.remove("hidden");
+    }
+
+    function renderNotificationsDropdown() {
+      const badge = document.getElementById("notifBadgeCount");
+      const container = document.getElementById("notifListContainer");
+      if (sessionNotifications.length === 0) {
+        badge.classList.add("hidden");
+        return;
+      }
+      badge.textContent = sessionNotifications.length;
+      badge.classList.remove("hidden");
+
+      container.innerHTML = sessionNotifications.map(n => `
+        <div class="p-2.5 bg-storybook-parchment rounded-xl border border-storybook-vintageNavy/40">
+          <div class="flex justify-between items-center">
+            <h5 class="font-bold text-storybook-vintageNavy text-[11px]">${escapeHtml(n.title)}</h5>
+            <span class="text-[9px] text-gray-500">${n.time}</span>
+          </div>
+          <p class="text-gray-700 text-[11px] mt-0.5">${escapeHtml(n.body)}</p>
+        </div>
+      `).join("");
+    }
+
+    function toggleNotifDropdown() {
+      document.getElementById("notifDropdown").classList.toggle("hidden");
+    }
+
+    // =========================================================================
+    // 2. ĐĂNG NHẬP & ĐĂNG KÝ THÀNH VIÊN MỚI (TỰ ĐỘNG LEVEL 1 - EXPLORER)
+    // =========================================================================
+    function toggleAuthTab(mode) {
+      document.getElementById("loginAlertBox").classList.add("hidden");
+      if (mode === "login") {
+        document.getElementById("loginForm").classList.remove("hidden");
+        document.getElementById("registerForm").classList.add("hidden");
+        document.getElementById("tabBtnLogin").className = "text-amber-600 border-b-2 border-amber-600 pb-1";
+        document.getElementById("tabBtnRegister").className = "text-gray-400 pb-1";
+      } else {
+        document.getElementById("loginForm").classList.add("hidden");
+        document.getElementById("registerForm").classList.remove("hidden");
+        document.getElementById("tabBtnRegister").className = "text-amber-600 border-b-2 border-amber-600 pb-1";
+        document.getElementById("tabBtnLogin").className = "text-gray-400 pb-1";
+      }
+    }
+
+    function renderSampleReadersChips() {
+      const box = document.getElementById("sampleUsersChips");
+      if (!appDb.READERS || appDb.READERS.length === 0) {
+        box.innerHTML = `<span class="text-gray-500 italic">Chưa có Reader trên Sheet — hãy chuyển sang tab "Đăng Ký Mới" để tạo tài khoản L1!</span>`;
+        return;
+      }
+      box.innerHTML = appDb.READERS.map(r => {
+        const key = r.User_Name || r.ID_Reader;
+        const name = r.Full_Name || key;
+        const lvl = r.ID_Level || "L1";
+        return `
+          <button type="button" onclick="quickFillLogin('${escapeHtml(key)}', '${escapeHtml(r.Password || "")}')"
+            class="bg-white hover:bg-amber-100 px-2 py-0.5 rounded-lg border border-amber-500 font-bold text-amber-950">
+            ${escapeHtml(name)} (${escapeHtml(lvl)})
+          </button>
+        `;
+      }).join("");
+    }
+
+    function quickFillLogin(userKey, pass) {
+      document.getElementById("loginUserKey").value = userKey;
+      document.getElementById("loginPassword").value = pass;
+    }
+
+    function restoreSessionIfAny() {
+      try {
+        const raw = localStorage.getItem("booklab_reader_session");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const matched = appDb.READERS.find(
+            r => String(r.ID_Reader || "").trim() === String(parsed.ID_Reader || "").trim()
+          );
+          currentReader = matched || parsed;
+          enterDashboard();
         }
       } catch (_) {}
     }
 
-    async function syncFromSheet(showToastOnSuccess = false) {
-      const refreshIcon = document.getElementById("refreshIcon");
-      const statusText = document.getElementById("apiStatusText");
-      if (refreshIcon) refreshIcon.classList.add("animate-spin");
-      if (statusText) statusText.textContent = "Đang đồng bộ Sheet...";
+    function handleLogin(e) {
+      e.preventDefault();
+      const key = document.getElementById("loginUserKey").value.trim().toLowerCase();
+      const pass = document.getElementById("loginPassword").value.trim();
+      const alertBox = document.getElementById("loginAlertBox");
 
-      // Chụp snapshot nhẹ để phát hiện bản ghi mới (Stateless CTA)
-      const prevBookIds = new Set(db.BOOKS.map(b => String(b.ID_Book || "").trim()).filter(Boolean));
-      const prevTourIds = new Set(db.READING_TOURS.map(t => String(t.Tour_ID || "").trim()).filter(Boolean));
-      const prevCoins = currentReader ? Number(currentReader.Ví_Bcoins || 0) : null;
+      const matched = appDb.READERS.find(r =>
+        String(r.User_Name || "").trim().toLowerCase() === key ||
+        String(r.ID_Reader || "").trim().toLowerCase() === key ||
+        String(r.Phone || "").trim().toLowerCase() === key
+      );
 
-      try {
-        const res = await fetch(API_URL, { method: "GET", cache: "no-store" });
-        const json = await res.json();
-
-        const sheetsObj = json.sheets || json.data || json;
-        if (sheetsObj && typeof sheetsObj === "object") {
-          if (Array.isArray(sheetsObj.READERS)) db.READERS = sheetsObj.READERS;
-          if (Array.isArray(sheetsObj.BOOKS)) db.BOOKS = sheetsObj.BOOKS;
-          if (Array.isArray(sheetsObj.LEVEL_READER) && sheetsObj.LEVEL_READER.length) {
-            db.LEVEL_READER = sheetsObj.LEVEL_READER;
-          }
-          if (Array.isArray(sheetsObj.REPORT_TEMPLATES) && sheetsObj.REPORT_TEMPLATES.length) {
-            db.REPORT_TEMPLATES = sheetsObj.REPORT_TEMPLATES;
-          }
-          if (Array.isArray(sheetsObj.READING_SESSIONS)) db.READING_SESSIONS = sheetsObj.READING_SESSIONS;
-          if (Array.isArray(sheetsObj.REPORT_SUBMISSIONS)) db.REPORT_SUBMISSIONS = sheetsObj.REPORT_SUBMISSIONS;
-
-          // Hỗ trợ cả tên bảng READING_TOURS và READING_TOUR_SCHEDULE
-          const toursRaw = sheetsObj.READING_TOURS || sheetsObj.READING_TOUR_SCHEDULE || [];
-          if (Array.isArray(toursRaw)) db.READING_TOURS = toursRaw;
-        }
-
-        if (statusText) statusText.textContent = "Đã đồng bộ Google Sheet";
-      } catch (err) {
-        console.warn("Lỗi gọi GET API, dùng dữ liệu dự phòng nếu chưa có:", err);
-        if (statusText) statusText.textContent = "Đang kiểm tra kết nối API";
-      } finally {
-        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
-      }
-
-      // Đảm bảo có Reader đang hoạt động
-      ensureActiveReader();
-
-      // Kiểm tra các biến động mới để kích hoạt CTA Banner (không lưu lịch sử)
-      detectStatelessCtaTriggers(prevBookIds, prevTourIds, prevCoins);
-
-      // Cập nhật toàn bộ giao diện
-      populateCategoryFilter();
-      renderHeaderAndProgress();
-      renderFootprintMap();
-      renderUpcomingTours();
-      renderQuickReadersInLogin();
-
-      if (showToastOnSuccess) {
-        showCtaBanner({
-          icon: "🔄",
-          title: "Đồng bộ thành công!",
-          desc: "Dữ liệu sách, lộ trình dấu chân và lịch Reading Tour đã được cập nhật mới nhất.",
-          actionLabel: "Xem lộ trình",
-          onAction: () => {
-            document.getElementById("footprintContainer")?.scrollIntoView({ behavior: "smooth" });
-          }
-        });
-      }
-    }
-
-    function ensureActiveReader() {
-      if (db.READERS.length > 0) {
-        if (currentReader) {
-          const matched = db.READERS.find(
-            r => String(r.ID_Reader) === String(currentReader.ID_Reader) ||
-                 String(r.User_Name) === String(currentReader.User_Name)
-          );
-          if (matched) {
-            currentReader = matched;
-            localStorage.setItem("booklab_current_reader", JSON.stringify(currentReader));
-            return;
-          }
-        }
-        // Mặc định lấy Reader đầu tiên trong danh sách nếu chưa chọn
-        currentReader = db.READERS[0];
-        localStorage.setItem("booklab_current_reader", JSON.stringify(currentReader));
-      } else if (!currentReader) {
-        currentReader = {
-          ID_Reader: "R001",
-          User_Name: "reader_demo",
-          Full_Name: "Reader Khám Phá",
-          ID_Level: "L1",
-          Title_Level: "Explorer",
-          Station_ID: "BookLab SENDA",
-          Ví_Bcoins: 0
-        };
-      }
-    }
-
-    // =========================================================================
-    // 4. HỆ THỐNG THÔNG BÁO TỰ ĐỘNG STATELESS (CALL TO ACTION)
-    // =========================================================================
-    function detectStatelessCtaTriggers(prevBookIds, prevTourIds, prevCoins) {
-      if (!currentReader) return;
-      const nowCoins = getReaderTotalBcoins(currentReader.ID_Reader);
-
-      // 1. Tăng B-coins
-      if (prevCoins !== null && nowCoins > prevCoins) {
-        const diff = nowCoins - prevCoins;
-        showCtaBanner({
-          icon: "🪙",
-          title: `Tin vui: Bạn vừa nhận thêm +${diff} B-coins!`,
-          desc: `Ví hiện tại có ${nowCoins} B-coins (${formatVnd(nowCoins * BCOIN_TO_VND)}). Ghé Trạm BookLab làm nhiệm vụ để tích lũy thêm nhé!`,
-          actionLabel: "Săn thêm xu",
-          onAction: () => {
-            setStatusFilter("UNLIT");
-          }
-        });
+      if (!matched) {
+        alertBox.textContent = "Không tìm thấy tài khoản Reader này trong Google Sheet. Bạn có thể chọn tài khoản mẫu hoặc Đăng Ký Mới!";
+        alertBox.classList.remove("hidden");
         return;
       }
 
-      // 2. Có sách mới trong BOOKS
-      if (prevBookIds.size > 0) {
-        const newBooks = db.BOOKS.filter(b => {
-          const id = String(b.ID_Book || "").trim();
-          return id && !prevBookIds.has(id);
-        });
-        if (newBooks.length > 0) {
-          const firstNew = newBooks[0];
-          showCtaBanner({
-            icon: "📚",
-            title: `Sách mới cập bến: "${firstNew.Title_Book || firstNew.ID_Book}"!`,
-            desc: `Kho BookLab vừa có thêm sách mới. Nhấn để thắp sáng dấu chân đầu tiên ngay hôm nay!`,
-            actionLabel: "Khám phá sách",
-            onAction: () => openBookModal(firstNew)
-          });
-          return;
-        }
+      const dbPass = String(matched.Password || "").trim();
+      if (dbPass !== "" && pass !== "" && dbPass !== pass) {
+        alertBox.textContent = "Mật khẩu chưa đúng, vui lòng kiểm tra lại!";
+        alertBox.classList.remove("hidden");
+        return;
       }
 
-      // 3. Có lịch tour mới trong READING_TOURS
-      if (prevTourIds.size > 0) {
-        const newTours = db.READING_TOURS.filter(t => {
-          const id = String(t.Tour_ID || "").trim();
-          return id && !prevTourIds.has(id);
-        });
-        if (newTours.length > 0) {
-          const tour = newTours[0];
-          showCtaBanner({
-            icon: "🎫",
-            title: `Reading Tour mới: ${tour.Tour_Name || "Sự kiện đọc sách"}!`,
-            desc: `Tổ chức tại ${tour.Station_ID || "Trạm BookLab"} · Thưởng +${tour.Reward_Bcoins || 0} B-coins. Ghé trạm tham gia ngay!`,
-            actionLabel: "Xem lịch tour",
-            onAction: () => {
-              document.getElementById("upcomingToursList")?.scrollIntoView({ behavior: "smooth" });
-            }
-          });
-        }
-      }
+      currentReader = matched;
+      localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
+      enterDashboard();
     }
 
-    function showCtaBanner({ icon, title, desc, actionLabel, onAction }) {
-      const container = document.getElementById("ctaBannerContainer");
-      document.getElementById("ctaBannerIcon").textContent = icon || "📣";
-      document.getElementById("ctaBannerTitle").textContent = title || "";
-      document.getElementById("ctaBannerDesc").textContent = desc || "";
-      const btn = document.getElementById("ctaBannerActionBtn");
-      btn.textContent = actionLabel || "Khám phá";
-      ctaActionCallback = onAction || null;
-      btn.onclick = () => {
-        if (typeof ctaActionCallback === "function") ctaActionCallback();
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitRegister");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang khởi tạo tài khoản L1...`;
+
+      const fullName = document.getElementById("regFullName").value.trim();
+      const userName = document.getElementById("regUserName").value.trim();
+      const birthYear = document.getElementById("regBirthYear").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+      const station = document.getElementById("regStation").value;
+      const parentsName = document.getElementById("regParentsName").value.trim();
+      const password = document.getElementById("regPassword").value.trim();
+
+      const nextIdx = appDb.READERS.length + 1;
+      const newReaderId = "R" + String(nextIdx).padStart(3, "0");
+
+      // Thành viên đăng ký mới tự động ở Level 1 - Explorer
+      const newReaderRecord = {
+        ID_Reader: newReaderId,
+        User_Name: userName,
+        Password: password,
+        Full_Name: fullName,
+        Birth_Year: birthYear,
+        Address: station,
+        Parents_Name: parentsName,
+        Phone: phone,
+        Email: "",
+        Station_ID: station,
+        ID_Level: "L1",
+        Title_Level: "Explorer",
+        Ví_Bcoins: 0
       };
-      container.classList.remove("hidden");
-    }
 
-    function dismissCtaBanner() {
-      document.getElementById("ctaBannerContainer").classList.add("hidden");
-    }
+      try {
+        await fetch(GAS_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            sheet: "READERS",
+            data: newReaderRecord
+          })
+        });
+      } catch (err) {
+        console.warn("Lỗi ghi READERS lên Google Sheet:", err);
+      }
 
-    // =========================================================================
-    // 5. TÍNH TOÁN TIẾN ĐỘ, B-COINS & QUY ĐỔI THÙ LAO (1 B-COIN = 5 VNĐ)
-    // =========================================================================
-    function getReaderSubmissions(readerId) {
-      return db.REPORT_SUBMISSIONS.filter(
-        sub => String(sub.ID_Reader || "").trim().toLowerCase() === String(readerId || "").trim().toLowerCase()
+      appDb.READERS.push(newReaderRecord);
+      currentReader = newReaderRecord;
+      localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> Đăng Ký Thành Viên L1 - Explorer`;
+
+      enterDashboard();
+      pushStatelessNotification(
+        "🎉 Chào mừng thành viên mới!",
+        `Xin chào ${fullName}! Bạn đã gia nhập BookLab ở cấp độ Level 1 - Explorer. Hãy chọn cuốn sách đầu tiên để thắp sáng dấu chân nhé!`
       );
     }
 
-    function getLitBookMap(readerId) {
-      const subs = getReaderSubmissions(readerId);
-      const map = new Map(); // ID_Book -> { bestScore, totalCoins, count }
-      subs.forEach(sub => {
-        const bookId = String(sub.ID_Book || "").trim();
-        if (!bookId) return;
+    function handleLogout() {
+      currentReader = null;
+      localStorage.removeItem("booklab_reader_session");
+      document.getElementById("mainDashboard").classList.add("hidden");
+      document.getElementById("authScreen").classList.remove("hidden");
+    }
+
+    function enterDashboard() {
+      document.getElementById("authScreen").classList.add("hidden");
+      document.getElementById("mainDashboard").classList.remove("hidden");
+      populateBookCategories();
+      refreshAllDashboardViews();
+    }
+
+    function refreshAllDashboardViews() {
+      if (!currentReader) return;
+      renderHeaderAndWallet();
+      renderFootprintBooks();
+      renderUpcomingTours();
+      renderMyReportsHistory();
+      renderProfileTab();
+    }
+
+    // =========================================================================
+    // 3. TOP BAR, TIẾN ĐỘ ĐỌC & VÍ THÙ LAO (1 B-COIN = 5 VNĐ)
+    // =========================================================================
+    function getReaderSubmissions() {
+      if (!currentReader) return [];
+      const rId = String(currentReader.ID_Reader || "").trim().toLowerCase();
+      return appDb.REPORT_SUBMISSIONS.filter(
+        s => String(s.ID_Reader || "").trim().toLowerCase() === rId
+      );
+    }
+
+    function getLitBooksMap() {
+      const map = new Map();
+      getReaderSubmissions().forEach(sub => {
+        const bId = String(sub.ID_Book || "").trim();
+        if (!bId) return;
         const score = Number(sub.Total_Score || 0);
         const coins = Number(sub.Bcoins_Awarded || 0);
-        const existing = map.get(bookId);
-        if (!existing) {
-          map.set(bookId, { bestScore: score, totalCoins: coins, count: 1 });
+        if (!map.has(bId)) {
+          map.set(bId, { bestScore: score, totalCoins: coins, count: 1 });
         } else {
-          existing.bestScore = Math.max(existing.bestScore, score);
-          existing.totalCoins += coins;
-          existing.count += 1;
+          const cur = map.get(bId);
+          cur.bestScore = Math.max(cur.bestScore, score);
+          cur.totalCoins += coins;
+          cur.count += 1;
         }
       });
       return map;
     }
 
-    function getReaderTotalBcoins(readerId) {
-      const subs = getReaderSubmissions(readerId);
-      const sumFromSubs = subs.reduce((acc, s) => acc + (Number(s.Bcoins_Awarded) || 0), 0);
-      const sheetCoins = Number(currentReader?.Ví_Bcoins || 0);
-      // Nếu có bài nộp đã cộng thêm hoặc sheet đã cập nhật thì lấy giá trị cao hơn để đồng bộ mượt
-      return Math.max(sheetCoins, sumFromSubs);
+    function calculateReaderBcoins(readerId) {
+      const rId = String(readerId || "").trim().toLowerCase();
+      const subsSum = appDb.REPORT_SUBMISSIONS
+        .filter(s => String(s.ID_Reader || "").trim().toLowerCase() === rId)
+        .reduce((sum, s) => sum + (Number(s.Bcoins_Awarded) || 0), 0);
+      const readerObj = appDb.READERS.find(r => String(r.ID_Reader || "").trim().toLowerCase() === rId);
+      const sheetCoins = Number(readerObj?.Ví_Bcoins || 0);
+      return Math.max(sheetCoins, subsSum);
     }
 
-    function formatVnd(amount) {
-      return Number(amount || 0).toLocaleString("vi-VN") + " VNĐ";
-    }
+    function renderHeaderAndWallet() {
+      const u = currentReader;
+      const lvl = String(u.ID_Level || "L1").trim();
+      const lvlObj = appDb.LEVEL_READER.find(l => String(l.ID_Level).trim() === lvl);
+      const lvlTitle = u.Title_Level || lvlObj?.Title_Level || "Explorer";
+      const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(u.Full_Name || u.ID_Reader)}`;
 
-    function renderHeaderAndProgress() {
-      if (!currentReader) return;
+      document.getElementById("topAvatarImg").src = avatarUrl;
+      document.getElementById("topUserName").textContent = u.Full_Name || u.User_Name || u.ID_Reader;
+      document.getElementById("topLevelBadge").textContent = lvl;
+      document.getElementById("topLevelTitle").textContent = `${lvl} - ${lvlTitle} 🧭`;
 
-      const name = currentReader.Full_Name || currentReader.User_Name || currentReader.ID_Reader;
-      const lvlId = String(currentReader.ID_Level || "L1").trim();
-      const lvlObj = db.LEVEL_READER.find(l => String(l.ID_Level).trim() === lvlId);
-      const lvlTitle = currentReader.Title_Level || lvlObj?.Title_Level || "Explorer";
+      const badge = document.getElementById("topLevelBadge");
+      const colorByLvl = { L1: "bg-level-l1", L2: "bg-level-l2", L3: "bg-level-l3", L4: "bg-level-l4" };
+      badge.className = `absolute -bottom-1 -right-1 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-storybook-vintageNavy ${colorByLvl[lvl] || "bg-level-l1"}`;
 
-      document.getElementById("readerGreeting").textContent = `Xin chào, ${name}!`;
-      document.getElementById("readerLevelBadge").textContent = `${lvlId} · ${lvlTitle}`;
+      // Tiến độ chinh phục lộ trình
+      const totalBooks = appDb.BOOKS.length;
+      const litMap = getLitBooksMap();
+      const litCount = appDb.BOOKS.filter(b => litMap.has(String(b.ID_Book || "").trim())).length;
+      const pct = totalBooks > 0 ? Math.round((litCount / totalBooks) * 100) : 0;
 
-      const stationBadge = document.getElementById("readerStationBadge");
-      if (currentReader.Station_ID) {
-        stationBadge.textContent = `📍 ${currentReader.Station_ID}`;
-        stationBadge.classList.remove("hidden");
-      } else {
-        stationBadge.classList.add("hidden");
-      }
+      document.getElementById("progressPercentBadge").textContent = `${pct}%`;
+      document.getElementById("progressBarFill").style.width = `${pct}%`;
+      document.getElementById("litBooksCountText").textContent = `${litCount} cuốn`;
+      document.getElementById("totalBooksCountText").textContent = `${totalBooks} cuốn`;
 
-      const totalBooks = db.BOOKS.length;
-      const litMap = getLitBookMap(currentReader.ID_Reader);
-      const litCount = db.BOOKS.filter(b => litMap.has(String(b.ID_Book || "").trim())).length;
-      const pct = totalBooks > 0 ? Math.round((litCount / totalBooks) * 1000) / 10 : 0;
-
-      document.getElementById("progressBarFill").style.width = `${Math.min(pct, 100)}%`;
-      document.getElementById("progressText").textContent = `${litCount}/${totalBooks} Dấu chân (${pct}%)`;
-
-      const totalCoins = getReaderTotalBcoins(currentReader.ID_Reader);
-      const vndValue = totalCoins * BCOIN_TO_VND;
-      document.getElementById("walletBcoins").textContent = `${totalCoins.toLocaleString("vi-VN")} B-coins`;
-      document.getElementById("walletVnd").textContent = `≈ ${formatVnd(vndValue)} (1 xu = ${BCOIN_TO_VND}đ)`;
+      // Ví B-coins & quy đổi 1 B-coin = 5 VNĐ
+      const totalBcoins = calculateReaderBcoins(u.ID_Reader);
+      const totalVnd = totalBcoins * BCOIN_RATE_VND;
+      document.getElementById("bcoinsDisplay").innerHTML = `${totalBcoins.toLocaleString()} <span class="text-xs font-bold text-amber-600">B-coins</span>`;
+      document.getElementById("vndDisplay").innerHTML = `≈ ${totalVnd.toLocaleString()} VNĐ <span class="text-[10px] text-gray-600 font-normal">(1 B-coin = ${BCOIN_RATE_VND} VNĐ)</span>`;
     }
 
     // =========================================================================
-    // 6. HIỂN THỊ BẢN ĐỒ DẤU CHÂN SÁCH (SÁNG ĐÈN / ĐEN TRẮNG)
+    // 4. TRÍCH XUẤT SÁCH & SẮP XẾP THEO SEQUENCE_ORDER THÀNH LỘ TRÌNH DẤU CHÂN
     // =========================================================================
-    function populateCategoryFilter() {
-      const select = document.getElementById("categoryFilter");
-      const currentVal = select.value;
-      const categories = Array.from(
-        new Set(db.BOOKS.map(b => String(b["Thể loại"] || b.Book_Type || "").trim()).filter(Boolean))
+    function populateBookCategories() {
+      const sel = document.getElementById("categorySelect");
+      const cats = Array.from(
+        new Set(appDb.BOOKS.map(b => String(b["Thể loại"] || b.Book_Type || "").trim()).filter(Boolean))
       );
-      select.innerHTML = `<option value="ALL">📚 Mọi thể loại</option>` +
-        categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
-      if (categories.includes(currentVal)) {
-        select.value = currentVal;
-      }
+      sel.innerHTML = `<option value="ALL">Mọi thể loại</option>` +
+        cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
     }
 
-    function setStatusFilter(mode) {
-      statusFilter = mode;
+    function setBookFilter(mode) {
+      bookStatusFilter = mode;
       ["ALL", "LIT", "UNLIT"].forEach(m => {
-        const btn = document.getElementById(`filter-${m}`);
-        if (!btn) return;
+        const btn = document.getElementById(`btnFilter${m}`);
         if (m === mode) {
-          btn.classList.remove("bg-white", "font-bold");
-          btn.classList.add("bg-honey", "font-extrabold");
+          btn.className = "px-2 py-1 rounded-lg text-[10px] font-bold bg-storybook-warmYellow border border-storybook-vintageNavy";
         } else {
-          btn.classList.remove("bg-honey", "font-extrabold");
-          btn.classList.add("bg-white", "font-bold");
+          btn.className = "px-2 py-1 rounded-lg text-[10px] font-bold bg-white border border-gray-400";
         }
       });
-      renderFootprintMap();
+      renderFootprintBooks();
     }
 
-    function getSortedBooks() {
-      return [...db.BOOKS].sort((a, b) => {
+    function renderFootprintBooks() {
+      const container = document.getElementById("footprintBooksList");
+      const litMap = getLitBooksMap();
+      const catFilter = document.getElementById("categorySelect").value;
+
+      // Sắp xếp thứ tự sách theo Sequence_Order
+      const sortedBooks = [...appDb.BOOKS].sort((a, b) => {
         const seqA = String(a.Sequence_Order || a.ID_Book || "");
         const seqB = String(b.Sequence_Order || b.ID_Book || "");
         return seqA.localeCompare(seqB, "vi", { numeric: true });
       });
-    }
-
-    function renderFootprintMap() {
-      const container = document.getElementById("footprintContainer");
-      if (!currentReader) return;
-
-      const litMap = getLitBookMap(currentReader.ID_Reader);
-      const sortedBooks = getSortedBooks();
-
-      const allCount = sortedBooks.length;
-      const litCount = sortedBooks.filter(b => litMap.has(String(b.ID_Book || "").trim())).length;
-      const unlitCount = allCount - litCount;
-
-      document.getElementById("countAll").textContent = allCount;
-      document.getElementById("countLit").textContent = litCount;
-      document.getElementById("countUnlit").textContent = unlitCount;
-
-      const keyword = (document.getElementById("searchBookInput")?.value || "").trim().toLowerCase();
-      const selectedCat = document.getElementById("categoryFilter")?.value || "ALL";
 
       const filtered = sortedBooks.filter(book => {
-        const bookId = String(book.ID_Book || "").trim();
-        const isLit = litMap.has(bookId);
-        if (statusFilter === "LIT" && !isLit) return false;
-        if (statusFilter === "UNLIT" && isLit) return false;
-
+        const bId = String(book.ID_Book || "").trim();
+        const isLit = litMap.has(bId);
+        if (bookStatusFilter === "LIT" && !isLit) return false;
+        if (bookStatusFilter === "UNLIT" && isLit) return false;
         const cat = String(book["Thể loại"] || book.Book_Type || "").trim();
-        if (selectedCat !== "ALL" && cat !== selectedCat) return false;
-
-        if (keyword) {
-          const title = String(book.Title_Book || "").toLowerCase();
-          if (!title.includes(keyword) && !bookId.toLowerCase().includes(keyword) && !cat.toLowerCase().includes(keyword)) {
-            return false;
-          }
-        }
+        if (catFilter !== "ALL" && cat !== catFilter) return false;
         return true;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-10 px-4 rounded-2xl border-2 border-dashed border-slate-300 bg-paper">
-            <div class="text-3xl mb-2">🔍</div>
-            <div class="font-bold text-slate-600 text-sm">Không tìm thấy cuốn sách nào khớp với bộ lọc hiện tại.</div>
-          </div>
-        `;
+        container.innerHTML = `<p class="text-center text-xs text-gray-500 py-8 font-bold">Không có cuốn sách nào phù hợp bộ lọc.</p>`;
         return;
       }
+
+      const zigZagAligns = ["justify-start pr-5", "justify-end pl-5", "justify-center px-2"];
 
       container.innerHTML = filtered.map((book, idx) => {
-        const bookId = String(book.ID_Book || `B${idx + 1}`).trim();
-        const title = String(book.Title_Book || "Chưa có tên sách").trim();
+        const bId = String(book.ID_Book || "").trim();
+        const title = String(book.Title_Book || "Chưa có tên").trim();
         const cat = String(book["Thể loại"] || book.Book_Type || "Khác").trim();
-        const level = String(book.Level_Reader || "L1").trim();
-        const nxb = String(book.Nxb || "").trim();
-        const stepNum = String(idx + 1).padStart(2, "0");
+        const lvl = String(book.Level_Reader || "L1").trim();
+        const seq = String(book.Sequence_Order || idx + 1).trim();
 
-        const litInfo = litMap.get(bookId);
+        const litInfo = litMap.get(bId);
         const isLit = Boolean(litInfo);
-        const isRightZigzag = idx % 2 === 1;
-
-        const cardStyleClass = isLit ? "footprint-lit" : "footprint-unlit";
-        const alignClass = isRightZigzag ? "md:ml-10" : "md:mr-10";
+        const alignClass = zigZagAligns[idx % zigZagAligns.length];
 
         return `
-          <div class="relative flex items-center gap-3 sm:gap-4 ${alignClass}">
-            <!-- Biểu tượng Dấu Chân (5 đầu ngón + bàn chân) -->
-            <div class="flex flex-col items-center shrink-0 select-none">
-              <div class="flex gap-0.5 mb-0.5">
-                <span class="w-1.5 h-2 rounded-full ${isLit ? 'bg-amber-500' : 'bg-slate-400'}"></span>
-                <span class="w-1.5 h-2.5 rounded-full ${isLit ? 'bg-amber-500' : 'bg-slate-400'}"></span>
-                <span class="w-1.5 h-2.5 rounded-full ${isLit ? 'bg-amber-500' : 'bg-slate-400'}"></span>
-                <span class="w-1.5 h-2 rounded-full ${isLit ? 'bg-amber-500' : 'bg-slate-400'}"></span>
-              </div>
-              <button
-                type="button"
-                onclick='openBookModal(${JSON.stringify(book).replace(/'/g, "&#39;")})'
-                class="w-12 h-12 rounded-2xl border-2 border-ink flex flex-col items-center justify-center font-sketch font-extrabold text-sm ${
-                  isLit ? "bg-honey text-ink shadow-sketch" : "bg-slate-200 text-slate-600"
-                }"
-                title="Mở sách ${escapeHtml(title)}"
-              >
-                <span>👣</span>
-                <span class="text-[10px] leading-none mt-0.5">#${stepNum}</span>
-              </button>
-            </div>
-
-            <!-- Thẻ Thông Tin Cuốn Sách -->
-            <div
-              onclick='openBookModal(${JSON.stringify(book).replace(/'/g, "&#39;")})'
-              class="flex-1 cursor-pointer rounded-2xl p-3.5 sm:p-4 transition-all duration-200 ${cardStyleClass}"
-            >
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <div class="space-y-1">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-white/90 border border-ink text-ink">
-                      ${escapeHtml(bookId)}
-                    </span>
-                    <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-mint/30 border border-ink text-ink">
-                      ${escapeHtml(cat)}
-                    </span>
-                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-white/80 border border-slate-400 text-slate-700">
-                      Trình độ ${escapeHtml(level)}
-                    </span>
-                    ${nxb ? `<span class="text-[11px] font-semibold text-slate-500">· ${escapeHtml(nxb)}</span>` : ""}
+          <div class="flex ${alignClass}">
+            <div onclick='openBookReportModal(${JSON.stringify(book).replace(/'/g, "&#39;")})'
+              class="paw-card cursor-pointer w-full max-w-[300px] p-3 rounded-3xl ${isLit ? "book-lit" : "book-unlit"}">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-11 h-11 rounded-2xl bg-white border-2 border-storybook-vintageNavy flex flex-col items-center justify-center shrink-0 shadow-sketchSm">
+                  <span class="text-base leading-none">${isLit ? "🐾" : "👣"}</span>
+                  <span class="text-[9px] font-extrabold text-amber-800 mt-0.5">#${idx + 1}</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-white border border-storybook-vintageNavy">${escapeHtml(bId)}</span>
+                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-storybook-skyLight border border-storybook-vintageNavy">${escapeHtml(cat)}</span>
+                    <span class="text-[9px] font-bold text-gray-600">· ${escapeHtml(lvl)}</span>
                   </div>
-                  <h3 class="font-sketch text-lg sm:text-xl font-extrabold text-ink leading-snug">
+                  <h4 class="font-display font-bold text-xs text-storybook-vintageNavy leading-snug mt-1 line-clamp-2">
                     ${escapeHtml(title)}
-                  </h3>
+                  </h4>
                 </div>
-
-                <!-- Trạng thái Sáng đèn / Đen trắng -->
-                <div class="shrink-0">
-                  ${
-                    isLit
-                      ? `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-honey border-2 border-ink text-xs font-extrabold text-ink shadow-sm">
-                          ✨ SÁNG ĐÈN · ${litInfo.bestScore}đ
-                        </span>`
-                      : `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/80 border border-slate-500 text-xs font-bold text-slate-600">
-                          ⬜ Đen trắng · Làm report
-                        </span>`
-                  }
-                </div>
+              </div>
+              <div class="mt-2 pt-1.5 border-t border-storybook-vintageNavy/20 flex justify-between items-center text-[10px]">
+                <span class="font-mono text-gray-600">Thứ tự: ${escapeHtml(seq)}</span>
+                ${
+                  isLit
+                    ? `<span class="bg-storybook-sageDark text-white font-bold px-2 py-0.5 rounded-full border border-storybook-vintageNavy">✨ Đã đọc (${litInfo.bestScore}đ)</span>`
+                    : `<span class="bg-gray-300 text-gray-700 font-bold px-2 py-0.5 rounded-full border border-gray-500">⬜ Viết Report</span>`
+                }
               </div>
             </div>
           </div>
@@ -992,307 +1138,157 @@
     }
 
     // =========================================================================
-    // 7. TRÍCH XUẤT LỊCH READING TOUR SẮP DIỄN RA
+    // 5. LÀM REPORT TRỰC TIẾP, TÍNH ĐIỂM TỰ ĐỘNG & UPDATE VÀO CSDL GOOGLE SHEET
     // =========================================================================
-    function renderUpcomingTours() {
-      const listEl = document.getElementById("upcomingToursList");
-      const countBadge = document.getElementById("upcomingTourCount");
-
-      const now = new Date();
-      const upcoming = db.READING_TOURS.filter(tour => {
-        const statusStr = String(tour.Status || "").trim().toLowerCase();
-        if (statusStr === "đã kết thúc" || statusStr === "hủy") return false;
-
-        const dtRaw = tour.Start_Datetime || tour.Date || tour.Start_Date;
-        if (dtRaw) {
-          const parsed = new Date(String(dtRaw).replace(" ", "T"));
-          if (!isNaN(parsed.getTime()) && parsed < now && statusStr !== "sắp diễn ra") {
-            return false;
-          }
-        }
-        return true;
-      });
-
-      countBadge.textContent = `${upcoming.length} tour`;
-
-      if (upcoming.length === 0) {
-        listEl.innerHTML = `
-          <div class="p-4 rounded-2xl border-2 border-dashed border-slate-300 bg-paper text-center text-xs font-bold text-slate-500">
-            Hiện chưa có Reading Tour sắp diễn ra. Hãy quay lại sau hoặc ghé Trạm BookLab để cập nhật nhé!
-          </div>
-        `;
-        return;
-      }
-
-      listEl.innerHTML = upcoming.map(tour => {
-        const tourName = tour.Tour_Name || tour.Title || "Chuyến phiêu lưu đọc sách";
-        const station = tour.Station_ID || tour.Location || "Trạm BookLab";
-        const timeStr = tour.Start_Datetime || tour.Date || "Sắp mở đăng ký";
-        const reward = Number(tour.Reward_Bcoins || 0);
-        const desc = tour.Description || "Hoạt động đọc tương tác, trò chơi & nhận B-coins tại trạm.";
-
-        return `
-          <div class="p-3.5 rounded-2xl bg-paper border-2 border-ink shadow-sketch space-y-2">
-            <div class="flex items-start justify-between gap-2">
-              <h4 class="font-sketch text-base font-extrabold text-ink leading-snug">
-                🎫 ${escapeHtml(tourName)}
-              </h4>
-              ${
-                reward > 0
-                  ? `<span class="shrink-0 px-2 py-0.5 rounded-full bg-honey border border-ink text-[11px] font-extrabold">+${reward} xu</span>`
-                  : ""
-              }
-            </div>
-            <div class="text-xs font-bold text-slate-700 space-y-0.5">
-              <div>🕒 ${escapeHtml(String(timeStr))}</div>
-              <div>📍 ${escapeHtml(String(station))}</div>
-            </div>
-            <p class="text-xs text-slate-600 font-medium">${escapeHtml(String(desc))}</p>
-            <button
-              type="button"
-              onclick='handleJoinTourCta(${JSON.stringify(tour).replace(/'/g, "&#39;")})'
-              class="w-full sketch-btn bg-coral/20 hover:bg-coral/35 text-ink font-extrabold text-xs py-1.5 rounded-xl"
-            >
-              Tham gia tại Trạm ➔
-            </button>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function handleJoinTourCta(tour) {
-      showCtaBanner({
-        icon: "🎒",
-        title: `Sẵn sàng tham gia "${tour.Tour_Name || "Reading Tour"}"!`,
-        desc: `Hẹn gặp bạn tại ${tour.Station_ID || "Trạm BookLab"} lúc ${tour.Start_Datetime || "lịch hẹn"} để nhận +${tour.Reward_Bcoins || 0} B-coins nhé!`,
-        actionLabel: "Đã hiểu",
-        onAction: () => dismissCtaBanner()
-      });
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // =========================================================================
-    // 8. LÀM READING REPORT TRỰC TIẾP, CHẤM ĐIỂM TỰ ĐỘNG & GHI GOOGLE SHEET (POST)
-    // =========================================================================
-    function openBookModal(book) {
-      selectedBook = book;
-      const bookId = String(book.ID_Book || "").trim();
+    function openBookReportModal(book) {
+      activeBook = book;
+      const bId = String(book.ID_Book || "").trim();
       const cat = String(book["Thể loại"] || book.Book_Type || "Khác").trim();
-      const lvl = String(book.Level_Reader || "L1").trim();
+      const litMap = getLitBooksMap();
+      const litInfo = litMap.get(bId);
 
-      document.getElementById("modalBookId").textContent = bookId;
-      document.getElementById("modalBookCategory").textContent = cat;
-      document.getElementById("modalBookLevel").textContent = `Sách ${lvl}`;
-      document.getElementById("modalBookTitle").textContent = book.Title_Book || "Cuốn sách";
+      document.getElementById("modalBookIdTag").textContent = bId;
+      document.getElementById("modalBookCatTag").textContent = cat;
+      document.getElementById("modalBookTitle").textContent = book.Title_Book || bId;
 
-      const litMap = getLitBookMap(currentReader?.ID_Reader);
-      const litInfo = litMap.get(bookId);
-      const statusBadge = document.getElementById("modalBookLitStatus");
+      const litBadge = document.getElementById("modalBookLitBadge");
       if (litInfo) {
-        statusBadge.textContent = `✨ Đã sáng đèn (${litInfo.bestScore}đ)`;
-        statusBadge.className = "px-2.5 py-0.5 rounded-lg bg-honey border border-ink text-xs font-extrabold text-ink";
+        litBadge.textContent = `✨ Đã sáng đèn (${litInfo.bestScore}đ)`;
+        litBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-storybook-sageDark text-white border border-storybook-vintageNavy";
       } else {
-        statusBadge.textContent = "⬜ Chưa làm report";
-        statusBadge.className = "px-2.5 py-0.5 rounded-lg bg-slate-200 border border-slate-400 text-xs font-bold text-slate-700";
+        litBadge.textContent = "⬜ Chưa làm Report";
+        litBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-200 text-gray-700 border border-gray-400";
       }
 
-      // Hiển thị các bài nộp trước đó nếu có
-      const prevBox = document.getElementById("previousSubmissionsBox");
-      const prevList = document.getElementById("previousSubmissionsList");
-      const bookSubs = getReaderSubmissions(currentReader?.ID_Reader).filter(
-        s => String(s.ID_Book || "").trim() === bookId
-      );
-      if (bookSubs.length > 0) {
-        prevBox.classList.remove("hidden");
-        prevList.innerHTML = bookSubs.map(s =>
-          `<div>• Điểm: <strong>${s.Total_Score || 0}/100</strong> | Nhận: <strong>+${s.Bcoins_Awarded || 0} B-coins</strong> (${s.Submitted_At || "Đã lưu"})</div>`
-        ).join("");
-      } else {
-        prevBox.classList.add("hidden");
-      }
+      document.getElementById("readingReportForm").reset();
+      document.getElementById("templateRoutingSelect").value = "READER";
+      document.getElementById("autoGradeResultCard").classList.add("hidden");
+      renderTemplatePrompts();
 
-      // Reset form & kết quả chấm
-      document.getElementById("reportForm").reset();
-      document.getElementById("templateModeSelect").value = "READER";
-      ["cntSec1", "cntSec2", "cntSec3", "cntSec4"].forEach(id => {
-        document.getElementById(id).textContent = "0";
-      });
-      document.getElementById("gradingResultBox").classList.add("hidden");
-      document.getElementById("btnSubmitReport").disabled = false;
-
-      updateActiveTemplateUI();
-
-      const modal = document.getElementById("reportModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
+      document.getElementById("reportModal").classList.remove("hidden");
     }
 
     function closeReportModal() {
-      const modal = document.getElementById("reportModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      selectedBook = null;
+      document.getElementById("reportModal").classList.add("hidden");
+      activeBook = null;
     }
 
-    function getAssignedTemplate(mode, readerLevel, bookLevel) {
-      const targetLvl = mode === "BOOK" ? (bookLevel || "L1") : (readerLevel || "L1");
-      const mapByLvl = { L1: "RR-01", L2: "RR-02", L3: "RR-03", L4: "RR-04" };
-      const tplId = mapByLvl[targetLvl] || "RR-01";
+    function resolveTemplateForCurrentSelection() {
+      const mode = document.getElementById("templateRoutingSelect").value;
+      const readerLvl = String(currentReader?.ID_Level || "L1").trim();
+      const bookLvl = String(activeBook?.Level_Reader || "L1").trim();
+      const targetLvl = mode === "BOOK" ? bookLvl : readerLvl;
+
+      const tplIdMap = { L1: "RR-01", L2: "RR-02", L3: "RR-03", L4: "RR-04" };
+      const tplId = tplIdMap[targetLvl] || "RR-01";
+
       return (
-        db.REPORT_TEMPLATES.find(t => String(t.Template_ID).trim() === tplId) ||
+        appDb.REPORT_TEMPLATES.find(t => String(t.Template_ID).trim() === tplId) ||
         DEFAULT_TEMPLATES.find(t => t.Template_ID === tplId) ||
         DEFAULT_TEMPLATES[0]
       );
     }
 
-    function updateActiveTemplateUI() {
-      if (!selectedBook || !currentReader) return;
-      const mode = document.getElementById("templateModeSelect").value;
-      const tpl = getAssignedTemplate(
-        mode,
-        String(currentReader.ID_Level || "L1").trim(),
-        String(selectedBook.Level_Reader || "L1").trim()
-      );
-
-      document.getElementById("activeTemplateTitle").textContent =
-        `${tpl.Template_ID} · ${tpl.Title_Report || "Phiếu Reading Report"}`;
-      document.getElementById("labelSec1").textContent =
-        tpl.Prompt_Section_1 || "1. Nội dung phần 1";
-      document.getElementById("labelSec2").textContent =
-        tpl.Prompt_Section_2 || "2. Nội dung phần 2";
-      document.getElementById("labelSec3").textContent =
-        tpl.Prompt_Section_3 || "3. Nội dung phần 3";
-      document.getElementById("labelSec4").textContent =
-        tpl.Prompt_Section_4 || "4. Nội dung phần 4";
+    function renderTemplatePrompts() {
+      const tpl = resolveTemplateForCurrentSelection();
+      document.getElementById("activeTemplateName").textContent = `${tpl.Template_ID} · ${tpl.Title_Report || "Phiếu Report"}`;
+      document.getElementById("lblSec1").textContent = tpl.Prompt_Section_1 || "1. Phần 1";
+      document.getElementById("lblSec2").textContent = tpl.Prompt_Section_2 || "2. Phần 2";
+      document.getElementById("lblSec3").textContent = tpl.Prompt_Section_3 || "3. Phần 3";
+      document.getElementById("lblSec4").textContent = tpl.Prompt_Section_4 || "4. Phần 4";
     }
 
-    function updateCharCounter(textarea, counterId) {
-      document.getElementById(counterId).textContent = textarea.value.length;
-    }
+    function computeAutoGrade(tplId, readerLvl, s1, s2, s3, s4) {
+      const answers = [s1, s2, s3, s4].map(x => String(x || "").trim());
 
-    /**
-     * Engine chấm điểm tự động theo Rubric 100 điểm:
-     * - Độ hoàn thiện (30đ)
-     * - Chiều sâu tư duy (40đ)
-     * - Ngôn ngữ & biểu đạt (30đ)
-     */
-    function autoGradeReport({ templateId, readerLevel, sec1, sec2, sec3, sec4 }) {
-      const answers = [sec1, sec2, sec3, sec4].map(s => String(s || "").trim());
-
-      // 1. Completion (0-30): mỗi phần hợp lệ (>= 6 ký tự và không lặp đơn điệu) được 7.5đ
-      let scoreCompletion = 0;
-      answers.forEach(ans => {
-        const isRepetitive = /^(.)\1{4,}$/i.test(ans);
-        if (ans.length >= 6 && !isRepetitive) {
-          scoreCompletion += 7.5;
-        } else if (ans.length > 0) {
-          scoreCompletion += 3;
-        }
+      // 1. Score_Completion (30đ)
+      let comp = 0;
+      answers.forEach(a => {
+        if (a.length >= 6 && !/^(.) {4,}$/.test(a)) comp += 7.5;
+        else if (a.length > 0) comp += 3;
       });
-      scoreCompletion = Math.min(30, Math.round(scoreCompletion));
+      const scoreCompletion = Math.min(30, Math.round(comp));
 
-      // 2. Thinking (0-40): độ phong phú ý tưởng + từ khóa tư duy theo mẫu
-      const combinedText = answers.join(" ").toLowerCase();
-      const wordsCount = combinedText.split(/\s+/).filter(Boolean).length;
-      let thinkingScore = Math.min(24, Math.floor(wordsCount / 3));
-
-      const thinkingKeywordsMap = {
-        "RR-01": ["vui", "buồn", "thích", "yêu", "sợ", "bất ngờ", "thương", "tò mò", "nghĩ", "muốn", "giúp"],
-        "RR-02": ["nhân vật", "vấn đề", "giải pháp", "kết quả", "bài học", "ví dụ", "nghĩa là", "giúp"],
-        "RR-03": ["vì", "nên", "do đó", "dẫn đến", "nguyên nhân", "kết quả", "sau đó", "bài học", "nhận ra"],
-        "RR-04": ["luận điểm", "bằng chứng", "lập luận", "bởi vì", "tuy nhiên", "mặt khác", "áp dụng", "thực tế", "phản biện"]
+      // 2. Score_Thinking (40đ)
+      const fullText = answers.join(" ").toLowerCase();
+      const words = fullText.split(/\s+/).filter(Boolean).length;
+      let think = Math.min(24, Math.floor(words / 3));
+      const keywordsByTpl = {
+        "RR-01": ["vui", "buồn", "thích", "yêu", "bất ngờ", "thương", "tò mò", "nghĩ", "muốn", "giúp"],
+        "RR-02": ["nhân vật", "vấn đề", "giải pháp", "kết quả", "bài học", "ví dụ", "nghĩa là"],
+        "RR-03": ["vì", "nên", "do đó", "dẫn đến", "nguyên nhân", "kết quả", "bài học", "nhận ra"],
+        "RR-04": ["luận điểm", "bằng chứng", "lập luận", "bởi vì", "tuy nhiên", "áp dụng", "thực tế"]
       };
-      const kwList = thinkingKeywordsMap[templateId] || thinkingKeywordsMap["RR-02"];
-      const matchedKw = kwList.filter(kw => combinedText.includes(kw)).length;
-      thinkingScore += Math.min(16, matchedKw * 4);
-      const scoreThinking = Math.min(40, thinkingScore);
+      const kws = keywordsByTpl[tplId] || keywordsByTpl["RR-01"];
+      const hits = kws.filter(k => fullText.includes(k)).length;
+      think += Math.min(16, hits * 4);
+      const scoreThinking = Math.min(40, think);
 
-      // 3. Expression (0-30): độ dài phù hợp trình độ L1-L4 + cấu trúc câu
-      const totalChars = answers.reduce((sum, a) => sum + a.length, 0);
-      const minCharByLevel = { L1: 45, L2: 95, L3: 160, L4: 220 };
-      const targetChars = minCharByLevel[readerLevel] || 80;
-      const lengthRatio = Math.min(1, totalChars / targetChars);
-      let exprScore = Math.round(lengthRatio * 22);
-
-      // Cộng điểm có dấu câu / viết hoa đầu câu
-      const hasPunctuation = /[.!?…\n]/.test(combinedText);
-      const hasCapitals = answers.some(a => /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/.test(a));
-      if (hasPunctuation) exprScore += 4;
-      if (hasCapitals) exprScore += 4;
-      const scoreExpression = Math.min(30, exprScore);
+      // 3. Score_Expression (30đ)
+      const minLenMap = { L1: 40, L2: 90, L3: 150, L4: 210 };
+      const targetLen = minLenMap[readerLvl] || 60;
+      const totalLen = answers.reduce((acc, a) => acc + a.length, 0);
+      let expr = Math.round(Math.min(1, totalLen / targetLen) * 22);
+      if (/[.!?…
+]/.test(fullText)) expr += 4;
+      if (answers.some(a => /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/.test(a))) expr += 4;
+      const scoreExpression = Math.min(30, expr);
 
       const totalScore = scoreCompletion + scoreThinking + scoreExpression;
 
-      // Tính B-coins theo mốc thưởng chuẩn của LEVEL_READER
-      const lvlObj = db.LEVEL_READER.find(l => String(l.ID_Level).trim() === String(readerLevel).trim());
+      // Quy đổi B-coins theo cấp độ
+      const lvlObj = appDb.LEVEL_READER.find(l => String(l.ID_Level).trim() === readerLvl);
       const baseCoins = Number(lvlObj?.Bcoins_Base || 10);
-
-      let bcoinsAwarded = 0;
+      let bcoinsAwarded = baseCoins;
       let feedback = "";
+
       if (totalScore >= 85) {
         bcoinsAwarded = baseCoins + 5;
-        feedback = "Xuất sắc lắm! Bài report của bạn có ý tưởng rõ ràng, giàu cảm xúc/lập luận và được thưởng thêm +5 B-coins tư duy.";
+        feedback = "Xuất sắc! Bài report mạch lạc, giàu tư duy và được thưởng thêm +5 B-coins.";
       } else if (totalScore >= 65) {
         bcoinsAwarded = baseCoins;
-        feedback = "Làm tốt lắm! Bạn đã hoàn thành đầy đủ các phần và nắm bắt tốt nội dung sách. Lần sau viết thêm chi tiết để chạm mốc ≥85 điểm nhận thưởng thêm nhé!";
+        feedback = "Hoàn thành tốt! Bạn đã nắm chắc nội dung sách. Hãy viết thêm dẫn chứng để đạt ≥85 điểm nhé!";
       } else {
         bcoinsAwarded = Math.max(2, Math.round(baseCoins * 0.5));
-        feedback = "Ghi nhận nỗ lực khởi động của bạn! Hãy thử mở rộng thêm ví dụ, cảm xúc hoặc lý do ở từng phần để nâng điểm ở lần tiếp theo nhé.";
+        feedback = "Ghi nhận nỗ lực của bạn! Hãy mở rộng câu trả lời ở mỗi phần để nhận trọn vẹn B-coins nhé.";
       }
 
-      return {
-        scoreCompletion,
-        scoreThinking,
-        scoreExpression,
-        totalScore,
-        bcoinsAwarded,
-        feedback
-      };
+      return { scoreCompletion, scoreThinking, scoreExpression, totalScore, bcoinsAwarded, feedback };
     }
 
     async function handleReportSubmit(e) {
       e.preventDefault();
-      if (!selectedBook || !currentReader) return;
+      if (!activeBook || !currentReader) return;
 
-      const submitBtn = document.getElementById("btnSubmitReport");
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span>⏳ Đang chấm &amp; ghi Google Sheet...</span>`;
+      const btn = document.getElementById("btnSaveReport");
+      btn.disabled = true;
+      btn.textContent = "⏳ Đang chấm điểm & lưu vào Google Sheet...";
 
-      const mode = document.getElementById("templateModeSelect").value;
+      const tpl = resolveTemplateForCurrentSelection();
       const readerLvl = String(currentReader.ID_Level || "L1").trim();
-      const bookLvl = String(selectedBook.Level_Reader || "L1").trim();
-      const tpl = getAssignedTemplate(mode, readerLvl, bookLvl);
 
-      const sec1 = document.getElementById("ansSec1").value.trim();
-      const sec2 = document.getElementById("ansSec2").value.trim();
-      const sec3 = document.getElementById("ansSec3").value.trim();
-      const sec4 = document.getElementById("ansSec4").value.trim();
-      const mediaUrl = document.getElementById("mediaUrlInput").value.trim();
+      const s1 = document.getElementById("inpSec1").value.trim();
+      const s2 = document.getElementById("inpSec2").value.trim();
+      const s3 = document.getElementById("inpSec3").value.trim();
+      const s4 = document.getElementById("inpSec4").value.trim();
+      const mediaUrl = document.getElementById("inpMediaUrl").value.trim();
 
-      const graded = autoGradeReport({
-        templateId: tpl.Template_ID,
-        readerLevel: readerLvl,
-        sec1,
-        sec2,
-        sec3,
-        sec4
-      });
+      const graded = computeAutoGrade(tpl.Template_ID, readerLvl, s1, s2, s3, s4);
+      const nowStr = formatNowDateTime();
+      const subId = "SUB" + String(appDb.REPORT_SUBMISSIONS.length + 1).padStart(3, "0");
+      const sesId = "S" + String(appDb.READING_SESSIONS.length + 1).padStart(3, "0");
 
-      const nowStr = formatDateTime(new Date());
-      const subId = "SUB" + Date.now().toString().slice(-6);
-      const sessionId = "SES" + Date.now().toString().slice(-6);
-
-      const submissionRecord = {
+      const submissionPayload = {
         Submission_ID: subId,
-        Session_ID: sessionId,
+        Session_ID: sesId,
         ID_Reader: currentReader.ID_Reader,
-        ID_Book: selectedBook.ID_Book,
+        ID_Book: activeBook.ID_Book,
         Template_ID: tpl.Template_ID,
         Submitted_At: nowStr,
-        Answer_Sec_1: sec1,
-        Answer_Sec_2: sec2,
-        Answer_Sec_3: sec3,
-        Answer_Sec_4: sec4,
+        Answer_Sec_1: s1,
+        Answer_Sec_2: s2,
+        Answer_Sec_3: s3,
+        Answer_Sec_4: s4,
         Media_URL: mediaUrl,
         Score_Completion: graded.scoreCompletion,
         Score_Thinking: graded.scoreThinking,
@@ -1304,139 +1300,172 @@
         Graded_At: nowStr
       };
 
+      // Ghi trực tiếp vào Google Sheet REPORT_SUBMISSIONS
       try {
-        await fetch(API_URL, {
+        await fetch(GAS_API_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({
             sheet: "REPORT_SUBMISSIONS",
-            data: submissionRecord
+            data: submissionPayload
           })
         });
       } catch (err) {
-        console.warn("Gửi POST tới Google Sheet gặp lỗi mạng hoặc CORS, vẫn cập nhật UI cục bộ:", err);
+        console.warn("Lỗi gửi POST REPORT_SUBMISSIONS:", err);
       }
 
-      // Cập nhật state ngay lập tức để thẻ sách SÁNG ĐÈN & ví B-coins tăng
-      db.REPORT_SUBMISSIONS.push(submissionRecord);
-      currentReader.Ví_Bcoins = Number(currentReader.Ví_Bcoins || 0) + graded.bcoinsAwarded;
-      localStorage.setItem("booklab_current_reader", JSON.stringify(currentReader));
+      appDb.REPORT_SUBMISSIONS.push(submissionPayload);
+      currentReader.Ví_Bcoins = calculateReaderBcoins(currentReader.ID_Reader);
+      localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
 
-      // Hiển thị kết quả chấm ngay trong modal
-      document.getElementById("gradingResultBox").classList.remove("hidden");
-      document.getElementById("gradedScoreBadge").textContent = `${graded.totalScore} / 100 điểm`;
-      document.getElementById("gradedBreakdown").innerHTML = `
-        <div class="p-2 rounded-xl bg-white border border-amber-300">Hoàn thiện: ${graded.scoreCompletion}/30</div>
-        <div class="p-2 rounded-xl bg-white border border-amber-300">Tư duy: ${graded.scoreThinking}/40</div>
-        <div class="p-2 rounded-xl bg-white border border-amber-300">Biểu đạt: ${graded.scoreExpression}/30</div>
-      `;
-      document.getElementById("gradedCoinsLine").textContent =
-        `🪙 Nhận ngay +${graded.bcoinsAwarded} B-coins (≈ ${formatVnd(graded.bcoinsAwarded * BCOIN_TO_VND)})`;
-      document.getElementById("gradedFeedbackText").textContent = graded.feedback;
+      // Hiển thị kết quả chấm ngay trong Modal
+      document.getElementById("autoGradeResultCard").classList.remove("hidden");
+      document.getElementById("gradeTotalBadge").textContent = `${graded.totalScore}/100đ`;
+      document.getElementById("gradeDetailLine").textContent =
+        `Hoàn thiện: ${graded.scoreCompletion}/30 · Tư duy: ${graded.scoreThinking}/40 · Biểu đạt: ${graded.scoreExpression}/30`;
+      document.getElementById("gradeCoinsRewardLine").textContent =
+        `🪙 Cộng ngay +${graded.bcoinsAwarded} B-coins (≈ ${(graded.bcoinsAwarded * BCOIN_RATE_VND).toLocaleString()} VNĐ)`;
+      document.getElementById("gradeMentorNote").textContent = graded.feedback;
 
-      // Render lại Header, Tiến độ & Bản đồ dấu chân (sách vừa nộp sáng đèn!)
-      renderHeaderAndProgress();
-      renderFootprintMap();
+      refreshAllDashboardViews();
 
-      // Bật pop-up chúc mừng & CTA ghé trạm
-      openRewardModal(
-        `Bạn vừa hoàn thành report "${selectedBook.Title_Book}" với ${graded.totalScore}/100 điểm và nhận +${graded.bcoinsAwarded} B-coins!`
+      pushStatelessNotification(
+        `🪙 +${graded.bcoinsAwarded} B-coins từ sách "${activeBook.Title_Book}"!`,
+        `Bạn đạt ${graded.totalScore}/100 điểm và đã thắp sáng thêm 1 dấu chân trên hành trình đọc!`
       );
 
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<span>✨ Nộp Report &amp; Chấm Tự Động</span>`;
+      btn.disabled = false;
+      btn.textContent = "✨ Nộp Report & Nhận B-coins";
     }
 
     // =========================================================================
-    // 9. MODAL ĐĂNG NHẬP & POP-UP THƯỞNG
+    // 6. LỊCH READING TOUR SẮP DIỄN RA & NHẬT KÝ REPORT
     // =========================================================================
-    function openLoginModal() {
-      document.getElementById("loginErrorMsg").classList.add("hidden");
-      renderQuickReadersInLogin();
-      const modal = document.getElementById("loginModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    }
+    function renderUpcomingTours() {
+      const container = document.getElementById("upcomingToursContainer");
+      const now = new Date();
 
-    function closeLoginModal() {
-      const modal = document.getElementById("loginModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    }
+      const tours = appDb.READING_TOURS.filter(t => {
+        const status = String(t.Status || "").trim().toLowerCase();
+        if (status === "đã kết thúc" || status === "hủy") return false;
+        const rawDate = t.Start_Datetime || t.Start_Date || t.Date;
+        if (rawDate) {
+          const d = new Date(String(rawDate).replace(" ", "T"));
+          if (!isNaN(d.getTime()) && d < now && status !== "sắp diễn ra") return false;
+        }
+        return true;
+      });
 
-    function renderQuickReadersInLogin() {
-      const box = document.getElementById("quickReadersBox");
-      const list = document.getElementById("quickReadersList");
-      if (!db.READERS || db.READERS.length === 0) {
-        box.classList.add("hidden");
+      if (tours.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white sketch-card p-4 text-center text-xs text-gray-500 font-bold">
+            Hiện chưa có lịch Reading Tour sắp diễn ra. Ghé Trạm BookLab để nhận thông báo mới nhất nhé!
+          </div>
+        `;
         return;
       }
-      box.classList.remove("hidden");
-      list.innerHTML = db.READERS.slice(0, 12).map(r => {
-        const label = r.Full_Name || r.User_Name || r.ID_Reader;
+
+      container.innerHTML = tours.map(t => `
+        <div class="bg-white sketch-card p-3.5 shadow-sketch space-y-1.5">
+          <div class="flex justify-between items-start gap-2">
+            <h4 class="font-display font-bold text-xs text-storybook-vintageNavy">🎫 ${escapeHtml(t.Tour_Name || "Reading Tour BookLab")}</h4>
+            <span class="bg-storybook-warmYellow px-2 py-0.5 rounded-full border border-storybook-vintageNavy text-[10px] font-extrabold shrink-0">
+              +${Number(t.Reward_Bcoins || 0)} B-coins
+            </span>
+          </div>
+          <p class="text-[11px] font-bold text-sky-800">🕒 ${escapeHtml(String(t.Start_Datetime || t.Start_Date || "Sắp diễn ra"))}</p>
+          <p class="text-[11px] font-bold text-amber-800">📍 ${escapeHtml(String(t.Station_ID || "Trạm BookLab"))}</p>
+          <p class="text-[11px] text-gray-600">${escapeHtml(String(t.Description || "Trải nghiệm đọc sách tương tác và săn B-coins tại trạm."))}</p>
+        </div>
+      `).join("");
+    }
+
+    function renderMyReportsHistory() {
+      const container = document.getElementById("myReportsHistoryList");
+      const subs = getReaderSubmissions();
+
+      if (subs.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white sketch-card p-4 text-center text-xs text-gray-500 font-bold">
+            Bạn chưa nộp bài Reading Report nào. Hãy quay lại tab Lộ Trình và chọn một cuốn sách nhé!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = [...subs].reverse().map(s => {
+        const book = appDb.BOOKS.find(b => String(b.ID_Book).trim() === String(s.ID_Book).trim());
+        const bookTitle = book ? book.Title_Book : s.ID_Book;
         return `
-          <button
-            type="button"
-            onclick='selectReaderDirectly(${JSON.stringify(r).replace(/'/g, "&#39;")})'
-            class="px-2.5 py-1 rounded-lg bg-honeySoft hover:bg-honey border border-ink text-xs font-bold text-ink"
-          >
-            ${escapeHtml(label)} (${escapeHtml(r.ID_Level || "L1")})
-          </button>
+          <div class="bg-white sketch-card p-3 shadow-sketchSm space-y-1">
+            <div class="flex justify-between items-start gap-2">
+              <h4 class="font-display font-bold text-xs text-storybook-vintageNavy">${escapeHtml(bookTitle)}</h4>
+              <span class="bg-storybook-warmYellow px-2 py-0.5 rounded-full border border-storybook-vintageNavy text-[10px] font-extrabold shrink-0">
+                ${Number(s.Total_Score || 0)}/100đ · +${Number(s.Bcoins_Awarded || 0)} xu
+              </span>
+            </div>
+            <p class="text-[10px] text-gray-500 font-mono">Mẫu ${escapeHtml(s.Template_ID || "RR-01")} · ${escapeHtml(s.Submitted_At || "")}</p>
+            <p class="text-[11px] text-gray-700 line-clamp-2">${escapeHtml(s.Answer_Sec_1 || "")}</p>
+          </div>
         `;
       }).join("");
     }
 
-    function selectReaderDirectly(readerObj) {
-      currentReader = readerObj;
-      localStorage.setItem("booklab_current_reader", JSON.stringify(currentReader));
-      closeLoginModal();
-      renderHeaderAndProgress();
-      renderFootprintMap();
-    }
+    function renderProfileTab() {
+      const u = currentReader;
+      const lvl = String(u.ID_Level || "L1").trim();
+      const lvlObj = appDb.LEVEL_READER.find(l => String(l.ID_Level).trim() === lvl);
+      const lvlTitle = u.Title_Level || lvlObj?.Title_Level || "Explorer";
+      const coins = calculateReaderBcoins(u.ID_Reader);
+      const vnd = coins * BCOIN_RATE_VND;
+      const avatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(u.Full_Name || u.ID_Reader)}`;
 
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const uInput = document.getElementById("loginUsername").value.trim().toLowerCase();
-      const pInput = document.getElementById("loginPassword").value.trim();
-      const errEl = document.getElementById("loginErrorMsg");
+      document.getElementById("tabProfileAvatar").src = avatar;
+      document.getElementById("tabProfileName").textContent = u.Full_Name || u.User_Name;
+      document.getElementById("tabProfileId").textContent = `ID_Reader: ${u.ID_Reader} · User: ${u.User_Name || "-"}`;
+      document.getElementById("tabProfileLevel").textContent = `${lvl} - ${lvlTitle}`;
+      document.getElementById("tabProfileStation").textContent = u.Station_ID || u.Address || "BookLab SENDA";
+      document.getElementById("tabProfileParent").textContent = u.Parents_Name || "-";
+      document.getElementById("tabProfilePhone").textContent = u.Phone || "-";
+      document.getElementById("tabProfileCoins").textContent = `${coins.toLocaleString()} B-coins`;
+      document.getElementById("tabProfileVnd").textContent = `${vnd.toLocaleString()} VNĐ`;
 
-      const found = db.READERS.find(r =>
-        String(r.User_Name || "").trim().toLowerCase() === uInput ||
-        String(r.ID_Reader || "").trim().toLowerCase() === uInput
-      );
-
-      if (!found) {
-        errEl.textContent = "Không tìm thấy tài khoản Reader này trong hệ thống.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      if (found.Password && String(found.Password).trim() !== "" && pInput !== "" && String(found.Password).trim() !== pInput) {
-        errEl.textContent = "Mật khẩu chưa chính xác. Vui lòng thử lại.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      selectReaderDirectly(found);
-    }
-
-    function openRewardModal(message) {
-      document.getElementById("rewardModalText").textContent = message;
-      const modal = document.getElementById("rewardToastModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    }
-
-    function closeRewardModal() {
-      const modal = document.getElementById("rewardToastModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
+      // Quick Profile Modal
+      document.getElementById("quickModalAvatar").src = avatar;
+      document.getElementById("quickModalName").textContent = u.Full_Name || u.User_Name;
+      document.getElementById("quickModalLevel").textContent = `${lvl} - ${lvlTitle}`;
+      document.getElementById("quickModalCoins").textContent = `${coins.toLocaleString()} B-coins`;
+      document.getElementById("quickModalVnd").textContent = `${vnd.toLocaleString()} VNĐ`;
     }
 
     // =========================================================================
-    // 10. TIỆN ÍCH ĐỊNH DẠNG
+    // 7. ĐIỀU HƯỚNG TAB & TIỆN ÍCH
     // =========================================================================
-    function formatDateTime(d) {
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+      document.getElementById(tabId).classList.remove("hidden");
+
+      ["tab1", "tab2", "tab3", "tab4"].forEach(id => {
+        const btn = document.getElementById(`navBtn-${id}`);
+        if (id === tabId) {
+          btn.className = "flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px] bg-storybook-warmYellow border-2 border-storybook-vintageNavy shadow-sketchSm";
+        } else {
+          btn.className = "flex flex-col items-center justify-center w-20 py-1 rounded-xl text-storybook-vintageNavy font-bold text-[10px]";
+        }
+      });
+    }
+
+    function openProfileModal() {
+      renderProfileTab();
+      document.getElementById("profileModal").classList.remove("hidden");
+    }
+
+    function closeProfileModal() {
+      document.getElementById("profileModal").classList.add("hidden");
+    }
+
+    function formatNowDateTime() {
+      const d = new Date();
       const pad = n => String(n).padStart(2, "0");
       return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     }
