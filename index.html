@@ -653,9 +653,11 @@
       const prevBcoins = currentReader ? calculateReaderBcoins(currentReader.ID_Reader) : null;
 
       try {
-        const res = await fetch(GAS_API_URL, { method: "GET", cache: "no-store" });
-        const json = await res.json();
-        const sheets = json.sheets || json.data || json;
+        const res = await fetch(GAS_API_URL + (GAS_API_URL.includes("?") ? "&" : "?") + "t=" + Date.now(), { method: "GET", cache: "no-store" });
+        const rawText = await res.text();
+        let json = {};
+        try { json = JSON.parse(rawText); } catch (_) { json = {}; }
+        const sheets = (json && json.sheets) || (json && json.data) || json || {};
 
         if (sheets && typeof sheets === "object") {
           if (Array.isArray(sheets.READERS)) appDb.READERS = sheets.READERS;
@@ -850,30 +852,43 @@
       } catch (_) {}
     }
 
+    function normalizeKey(val) {
+      return String(val ?? "").trim().toLowerCase().replace(/^0+/, (m, offset, str) => (str.length === 1 ? "0" : ""));
+    }
+
     function handleLogin(e) {
       e.preventDefault();
-      const key = document.getElementById("loginUserKey").value.trim().toLowerCase();
+      const rawKey = document.getElementById("loginUserKey").value.trim();
+      const key = rawKey.toLowerCase();
       const pass = document.getElementById("loginPassword").value.trim();
       const alertBox = document.getElementById("loginAlertBox");
+      alertBox.classList.add("hidden");
 
-      const matched = appDb.READERS.find(r =>
-        String(r.User_Name || "").trim().toLowerCase() === key ||
-        String(r.ID_Reader || "").trim().toLowerCase() === key ||
-        String(r.Phone || "").trim().toLowerCase() === key
-      );
+      const matched = appDb.READERS.find(r => {
+        const uName = String(r.User_Name ?? r.username ?? r.Username ?? "").trim().toLowerCase();
+        const rId = String(r.ID_Reader ?? r.Reader_ID ?? r.id_reader ?? "").trim().toLowerCase();
+        const phone = String(r.Phone ?? r.SDT ?? r.phone ?? "").trim().toLowerCase();
+        const fullName = String(r.Full_Name ?? r.Name ?? "").trim().toLowerCase();
+        return uName === key || rId === key || phone === key || (fullName && fullName === key);
+      });
 
       if (!matched) {
-        alertBox.textContent = "Không tìm thấy tài khoản Reader này trong Google Sheet. Bạn có thể chọn tài khoản mẫu hoặc Đăng Ký Mới!";
+        alertBox.textContent = "Không tìm thấy tài khoản '" + rawKey + "' trong bảng READERS. Hãy thử chọn tài khoản mẫu bên dưới hoặc chuyển sang tab Đăng Ký Mới!";
         alertBox.classList.remove("hidden");
         return;
       }
 
-      const dbPass = String(matched.Password || "").trim();
+      const dbPass = String(matched.Password ?? matched.password ?? "").trim();
       if (dbPass !== "" && pass !== "" && dbPass !== pass) {
-        alertBox.textContent = "Mật khẩu chưa đúng, vui lòng kiểm tra lại!";
+        alertBox.textContent = "Mật khẩu chưa đúng (mật khẩu trên Sheet là '" + dbPass + "').";
         alertBox.classList.remove("hidden");
         return;
       }
+
+      if (!matched.ID_Reader) matched.ID_Reader = matched.Reader_ID || ("R_" + Date.now());
+      if (!matched.Full_Name) matched.Full_Name = matched.User_Name || matched.ID_Reader;
+      if (!matched.ID_Level) matched.ID_Level = "L1";
+      if (!matched.Title_Level) matched.Title_Level = "Explorer";
 
       currentReader = matched;
       localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
@@ -887,15 +902,21 @@
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang khởi tạo tài khoản L1...`;
 
       const fullName = document.getElementById("regFullName").value.trim();
-      const userName = document.getElementById("regUserName").value.trim();
+      const userName = (document.getElementById("regUserName").value.trim() || fullName.toLowerCase().replace(/[^a-z0-9]/g, ""));
       const birthYear = document.getElementById("regBirthYear").value.trim();
       const phone = document.getElementById("regPhone").value.trim();
       const station = document.getElementById("regStation").value;
       const parentsName = document.getElementById("regParentsName").value.trim();
-      const password = document.getElementById("regPassword").value.trim();
+      const password = document.getElementById("regPassword").value.trim() || "123456";
 
-      const nextIdx = appDb.READERS.length + 1;
-      const newReaderId = "R" + String(nextIdx).padStart(3, "0");
+      // Đảm bảo ID_Reader không trùng bất kỳ ID nào đã có
+      const existingIds = new Set(appDb.READERS.map(r => String(r.ID_Reader || "").trim()));
+      let idx = appDb.READERS.length + 1;
+      let newReaderId = "R" + String(idx).padStart(3, "0");
+      while (existingIds.has(newReaderId)) {
+        idx += 1;
+        newReaderId = "R" + String(idx).padStart(3, "0");
+      }
 
       // Thành viên đăng ký mới tự động ở Level 1 - Explorer
       const newReaderRecord = {
@@ -914,20 +935,37 @@
         Ví_Bcoins: 0
       };
 
+      const payload = JSON.stringify({
+        sheet: "READERS",
+        table: "READERS",
+        action: "create",
+        data: newReaderRecord
+      });
+
+      let postOk = false;
       try {
-        await fetch(GAS_API_URL, {
+        const resp = await fetch(GAS_API_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            sheet: "READERS",
-            data: newReaderRecord
-          })
+          body: payload
         });
+        postOk = resp.ok || resp.type === "opaque";
       } catch (err) {
-        console.warn("Lỗi ghi READERS lên Google Sheet:", err);
+        console.warn("POST text/plain lỗi, thử gửi qua form/no-cors:", err);
+        try {
+          await fetch(GAS_API_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: payload
+          });
+          postOk = true;
+        } catch (err2) {
+          console.warn("Lỗi ghi READERS lên Google Sheet:", err2);
+        }
       }
 
       appDb.READERS.push(newReaderRecord);
+      renderSampleReadersChips();
       currentReader = newReaderRecord;
       localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
 
@@ -937,7 +975,7 @@
       enterDashboard();
       pushStatelessNotification(
         "🎉 Chào mừng thành viên mới!",
-        `Xin chào ${fullName}! Bạn đã gia nhập BookLab ở cấp độ Level 1 - Explorer. Hãy chọn cuốn sách đầu tiên để thắp sáng dấu chân nhé!`
+        `Xin chào ${fullName} (${newReaderId})! Bạn đã gia nhập BookLab ở cấp độ Level 1 - Explorer` + (postOk ? " và đã gửi yêu cầu lưu vào Google Sheet." : " (đã lưu phiên local).")
       );
     }
 
