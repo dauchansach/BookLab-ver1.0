@@ -652,16 +652,55 @@
       const prevTourIds = new Set(appDb.READING_TOURS.map(t => String(t.Tour_ID || "").trim()).filter(Boolean));
       const prevBcoins = currentReader ? calculateReaderBcoins(currentReader.ID_Reader) : null;
 
+      const FALLBACK_READERS = [
+        {
+          ID_Reader: "R001",
+          User_Name: "minhkhoi",
+          Password: "",
+          Full_Name: "Nguyễn Minh Khôi",
+          Birth_Year: "2016",
+          Address: "BookLab SENDA",
+          Parents_Name: "Phụ huynh Minh Khôi",
+          Phone: "0981112233",
+          Station_ID: "BookLab SENDA",
+          ID_Level: "L1",
+          Title_Level: "Explorer",
+          Ví_Bcoins: 20
+        },
+        {
+          ID_Reader: "R002",
+          User_Name: "anhthu",
+          Password: "",
+          Full_Name: "Trần Anh Thư",
+          Birth_Year: "2015",
+          Address: "Trạm Bình Yên",
+          Parents_Name: "Phụ huynh Anh Thư",
+          Phone: "0984445566",
+          Station_ID: "Trạm Bình Yên",
+          ID_Level: "L2",
+          Title_Level: "Builder",
+          Ví_Bcoins: 35
+        }
+      ];
+
       try {
-        const res = await fetch(GAS_API_URL + (GAS_API_URL.includes("?") ? "&" : "?") + "t=" + Date.now(), { method: "GET", cache: "no-store" });
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 7000);
+        const res = await fetch(
+          GAS_API_URL + (GAS_API_URL.includes("?") ? "&" : "?") + "action=getAll&t=" + Date.now(),
+          { method: "GET", cache: "no-store", signal: controller.signal }
+        );
+        clearTimeout(timer);
+
         const rawText = await res.text();
         let json = {};
         try { json = JSON.parse(rawText); } catch (_) { json = {}; }
         const sheets = (json && json.sheets) || (json && json.data) || json || {};
 
+        let loadedFromSheet = false;
         if (sheets && typeof sheets === "object") {
-          if (Array.isArray(sheets.READERS)) appDb.READERS = sheets.READERS;
-          if (Array.isArray(sheets.BOOKS)) appDb.BOOKS = sheets.BOOKS;
+          if (Array.isArray(sheets.READERS)) { appDb.READERS = sheets.READERS; loadedFromSheet = true; }
+          if (Array.isArray(sheets.BOOKS)) { appDb.BOOKS = sheets.BOOKS; loadedFromSheet = true; }
           if (Array.isArray(sheets.LEVEL_READER) && sheets.LEVEL_READER.length > 0) {
             appDb.LEVEL_READER = sheets.LEVEL_READER;
           }
@@ -675,12 +714,23 @@
           if (Array.isArray(toursData)) appDb.READING_TOURS = toursData;
         }
 
+        if (!loadedFromSheet && (!Array.isArray(appDb.READERS) || appDb.READERS.length === 0)) {
+          appDb.READERS = [...FALLBACK_READERS];
+        }
+
         if (authSyncText) {
-          authSyncText.textContent = `Đã kết nối (${appDb.READERS.length} Readers · ${appDb.BOOKS.length} Sách)`;
+          authSyncText.textContent = loadedFromSheet
+            ? `Đã kết nối Sheet (${appDb.READERS.length} Readers · ${appDb.BOOKS.length} Sách)`
+            : `Dùng dữ liệu mẫu (${appDb.READERS.length} Readers) — chưa đọc được JSON từ GAS`;
         }
       } catch (err) {
         console.warn("Lỗi kết nối GET API:", err);
-        if (authSyncText) authSyncText.textContent = "Chế độ ngoại tuyến / kiểm tra quyền Web App";
+        if (!Array.isArray(appDb.READERS) || appDb.READERS.length === 0) {
+          appDb.READERS = [...FALLBACK_READERS];
+        }
+        if (authSyncText) {
+          authSyncText.textContent = "Chưa kết nối được Google Sheet (đang mở Reader mẫu để test)";
+        }
       } finally {
         if (syncIcon) syncIcon.classList.remove("fa-spin");
       }
