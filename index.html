@@ -914,12 +914,16 @@
       const alertBox = document.getElementById("loginAlertBox");
       alertBox.classList.add("hidden");
 
-      const matched = appDb.READERS.find(r => {
+      const normKey = normalizeKey(rawKey);
+      const matched = (appDb.READERS || []).find(r => {
         const uName = String(r.User_Name ?? r.username ?? r.Username ?? "").trim().toLowerCase();
         const rId = String(r.ID_Reader ?? r.Reader_ID ?? r.id_reader ?? "").trim().toLowerCase();
         const phone = String(r.Phone ?? r.SDT ?? r.phone ?? "").trim().toLowerCase();
         const fullName = String(r.Full_Name ?? r.Name ?? "").trim().toLowerCase();
-        return uName === key || rId === key || phone === key || (fullName && fullName === key);
+        return (
+          uName === key || rId === key || phone === key || (fullName && fullName === key) ||
+          (normKey && (normalizeKey(uName) === normKey || normalizeKey(rId) === normKey || normalizeKey(phone) === normKey))
+        );
       });
 
       if (!matched) {
@@ -1292,7 +1296,7 @@
       // 1. Score_Completion (30đ)
       let comp = 0;
       answers.forEach(a => {
-        if (a.length >= 6 && !/^(.) {4,}$/.test(a)) comp += 7.5;
+        if (a.length >= 6 && !/^(.)\1{4,}$/.test(a)) comp += 7.5;
         else if (a.length > 0) comp += 3;
       });
       const scoreCompletion = Math.min(30, Math.round(comp));
@@ -1317,8 +1321,7 @@
       const targetLen = minLenMap[readerLvl] || 60;
       const totalLen = answers.reduce((acc, a) => acc + a.length, 0);
       let expr = Math.round(Math.min(1, totalLen / targetLen) * 22);
-      if (/[.!?…
-]/.test(fullText)) expr += 4;
+      if (/[.!?…\n]/.test(fullText)) expr += 4;
       if (answers.some(a => /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/.test(a))) expr += 4;
       const scoreExpression = Math.min(30, expr);
 
