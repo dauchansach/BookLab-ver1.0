@@ -15,47 +15,356 @@
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Patrick+Hand&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            storybook: {
-              cream: '#FFFDF7',
-              parchment: '#F6EEDF',
-              warmYellow: '#FFD54F',
-              amberDark: '#D97706',
-              sageLight: '#E8F5E9',
-              sageDark: '#4CAF50',
-              skyLight: '#E0F7FA',
-              skyDark: '#00BCD4',
-              indigoLight: '#E8EAF6',
-              indigoDark: '#3F51B5',
-              rosePastel: '#FFE4E6',
-              coral: '#E07A5F',
-              vintageNavy: '#2C3E50',
-              barkBrown: '#5C4033'
-            },
-            level: {
-              l1: '#FFC107', // Explorer - Vàng
-              l2: '#00BCD4', // Builder - Xanh da trời
-              l3: '#3F51B5', // Tracker - Xanh dương
-              l4: '#4CAF50'  // Researcher - Xanh lá
+    // =========================================================================
+    // 1. ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET (GET) & TRÍCH XUẤT TOÀN BỘ BẢNG
+    // =========================================================================
+    async function syncDatabase(isManualRefresh = false) {
+      const syncIcon = document.getElementById("syncIcon");
+      const authSyncText = document.getElementById("authSyncText");
+      if (syncIcon) syncIcon.classList.add("fa-spin");
+      if (authSyncText) authSyncText.textContent = "Đang đồng bộ dữ liệu từ Google Sheet...";
+
+      const prevBookIds = new Set(appDb.BOOKS.map(b => String(b.ID_Book || "").trim()).filter(Boolean));
+      const prevTourIds = new Set(appDb.READING_TOURS.map(t => String(t.Tour_ID || "").trim()).filter(Boolean));
+      const prevBcoins = currentReader ? calculateReaderBcoins(currentReader.ID_Reader) : null;
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 8000);
+        const res = await fetch(
+          GAS_API_URL + (GAS_API_URL.includes("?") ? "&" : "?") + "action=getAll&t=" + Date.now(),
+          { method: "GET", cache: "no-store", signal: controller.signal }
+        );
+        clearTimeout(timer);
+
+        const rawText = await res.text();
+        let json = {};
+        try { json = JSON.parse(rawText); } catch (_) { json = {}; }
+        const sheets = (json && json.sheets) || (json && json.data) || json || {};
+
+        let loadedFromSheet = false;
+        if (sheets && typeof sheets === "object") {
+          const getSheetArray = (...candidateNames) => {
+            for (const name of candidateNames) {
+              if (Array.isArray(sheets[name])) return sheets[name];
+              const hitKey = Object.keys(sheets).find(k => k.trim().toLowerCase() === name.toLowerCase());
+              if (hitKey && Array.isArray(sheets[hitKey])) return sheets[hitKey];
             }
-          },
-          fontFamily: {
-            hand: ['Patrick Hand', 'cursive'],
-            display: ['Comfortaa', 'cursive'],
-            sans: ['Quicksand', 'sans-serif']
-          },
-          boxShadow: {
-            sketch: '3.5px 4px 0px 0px #2C3E50',
-            sketchSm: '2px 2px 0px 0px #2C3E50',
-            sketchLg: '6px 8px 0px 0px #2C3E50',
-            glowYellow: '0 0 18px rgba(255, 193, 7, 0.65)',
-            glowGreen: '0 0 18px rgba(76, 175, 80, 0.65)'
+            return null;
+          };
+
+          const readersList = getSheetArray("READERS", "Reader", "Users");
+          if (readersList) { appDb.READERS = readersList; loadedFromSheet = true; }
+
+          // Trích xuất toàn bộ danh mục sách trong sheet BOOKS
+          const booksList = getSheetArray("BOOKS", "Book", "DanhMucSach");
+          if (booksList) {
+            appDb.BOOKS = booksList.filter(b => b && (b.ID_Book || b.Title_Book || b["Tên sách"] || b.Sequence_Order));
+            loadedFromSheet = true;
           }
+
+          const levelsList = getSheetArray("LEVEL_READER");
+          if (levelsList && levelsList.length > 0) appDb.LEVEL_READER = levelsList;
+
+          const templatesList = getSheetArray("REPORT_TEMPLATES", "READING_REPORT");
+          if (templatesList && templatesList.length > 0) appDb.REPORT_TEMPLATES = templatesList;
+
+          const sessionsList = getSheetArray("READING_SESSIONS");
+          if (sessionsList) appDb.READING_SESSIONS = sessionsList;
+
+          const subsList = getSheetArray("REPORT_SUBMISSIONS", "READING_REPORTS", "REPORTS");
+          if (subsList) appDb.REPORT_SUBMISSIONS = subsList;
+
+          const toursData = getSheetArray("READING_TOURS", "READING_TOUR_SCHEDULE", "TOURS") || [];
+          if (Array.isArray(toursData)) appDb.READING_TOURS = toursData;
         }
+
+        if (authSyncText) {
+          authSyncText.textContent = loadedFromSheet
+            ? `Đã kết nối Sheet (${appDb.READERS.length} Readers · ${appDb.BOOKS.length} Sách)`
+            : `Chưa đọc được JSON từ GAS (${appDb.READERS.length} Readers)`;
+        }
+      } catch (err) {
+        console.warn("Lỗi kết nối GET API:", err);
+        if (authSyncText) authSyncText.textContent = "Lỗi kết nối Google Sheet — kiểm tra quyền Web App";
+      } finally {
+        if (syncIcon) syncIcon.classList.remove("fa-spin");
       }
+
+      renderSampleReadersChips();
+
+      if (currentReader) {
+        const refreshed = appDb.READERS.find(
+          r => cleanNorm(r.ID_Reader) === cleanNorm(currentReader.ID_Reader)
+        );
+        if (refreshed) {
+          currentReader = refreshed;
+          localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
+        }
+        detectDatabaseChanges(prevBookIds, prevTourIds, prevBcoins, isManualRefresh);
+        refreshAllDashboardViews();
+      }
+    }
+
+    // =========================================================================
+    // 2. HÀM GHI DỮ LIỆU CHUNG LÊN GOOGLE APPS SCRIPT (HỖ TRỢ JSON & FORM POST)
+    // =========================================================================
+    async function postRecordToGas(sheetName, recordObj) {
+      const bodyWrapper = {
+        sheet: sheetName,
+        sheetName: sheetName,
+        table: sheetName,
+        action: "create",
+        op: "create",
+        data: recordObj,
+        record: recordObj,
+        row: recordObj
+      };
+      const jsonStr = JSON.stringify(bodyWrapper);
+
+      // Cách 1: Gửi JSON qua text/plain (không kích hoạt preflight OPTIONS trên GAS)
+      try {
+        const resp = await fetch(GAS_API_URL, {
+          method: "POST",
+          redirect: "follow",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: jsonStr
+        });
+        const txt = await resp.text();
+        try {
+          const j = JSON.parse(txt);
+          if (j && (j.ok === false || j.success === false || j.status === "error")) {
+            return { ok: false, message: j.message || j.error || "GAS từ chối bản ghi" };
+          }
+          if (resp.ok) return { ok: true, message: "" };
+        } catch (_) {
+          if (resp.ok || resp.type === "opaque") return { ok: true, message: "" };
+        }
+      } catch (err) {
+        console.warn("POST text/plain fallback sang form-urlencoded:", err);
+      }
+
+      // Cách 2: Gửi form-urlencoded qua no-cors để e.parameter trong GAS luôn đọc được
+      try {
+        const params = new URLSearchParams();
+        params.set("sheet", sheetName);
+        params.set("sheetName", sheetName);
+        params.set("table", sheetName);
+        params.set("action", "create");
+        params.set("payload", jsonStr);
+        params.set("data", JSON.stringify(recordObj));
+        Object.entries(recordObj).forEach(([k, v]) => {
+          params.set(k, v == null ? "" : String(v));
+        });
+
+        await fetch(GAS_API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: params.toString()
+        });
+        return { ok: true, message: "" };
+      } catch (err2) {
+        return { ok: false, message: String(err2?.message || err2) };
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitRegister");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Đang khởi tạo tài khoản L1...`;
+
+      const fullName = document.getElementById("regFullName").value.trim();
+      const userName = (document.getElementById("regUserName").value.trim() || fullName.toLowerCase().replace(/[^a-z0-9]/g, ""));
+      const birthYear = document.getElementById("regBirthYear").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+      const station = document.getElementById("regStation").value;
+      const parentsName = document.getElementById("regParentsName").value.trim();
+      const password = document.getElementById("regPassword").value.trim() || "123456";
+
+      const existingIds = new Set(appDb.READERS.map(r => String(r.ID_Reader || "").trim()));
+      let idx = appDb.READERS.length + 1;
+      let newReaderId = "R" + String(idx).padStart(3, "0");
+      while (existingIds.has(newReaderId)) {
+        idx += 1;
+        newReaderId = "R" + String(idx).padStart(3, "0");
+      }
+
+      // Khớp đúng 12 cột chuẩn của tab READERS trong CSDL
+      const newReaderRecord = {
+        ID_Reader: newReaderId,
+        User_Name: userName,
+        Password: password,
+        Full_Name: fullName,
+        Birth_Year: birthYear,
+        Address: station,
+        Parents_Name: parentsName,
+        Phone: phone,
+        Email: "",
+        ID_Level: "L1",
+        Title_Level: "Explorer",
+        Ví_Bcoins: 0
+      };
+
+      const postRes = await postRecordToGas("READERS", newReaderRecord);
+
+      appDb.READERS.push(newReaderRecord);
+      renderSampleReadersChips();
+      currentReader = newReaderRecord;
+      localStorage.setItem("booklab_reader_session", JSON.stringify(currentReader));
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> Đăng Ký Thành Viên L1 - Explorer`;
+
+      enterDashboard();
+      pushStatelessNotification(
+        "🎉 Chào mừng thành viên mới!",
+        postRes.ok
+          ? `Xin chào ${fullName} (${newReaderId})! Tài khoản Level 1 - Explorer đã được ghi lên Google Sheet.`
+          : `Xin chào ${fullName} (${newReaderId})! Chưa ghi được lên Sheet: ${postRes.message}`
+      );
+    }
+
+    // =========================================================================
+    // 3. ĐỐI CHIẾU LỊCH SỬ READING REPORT CỦA USER & SẮP XẾP SÁCH THEO SEQUENCE_ORDER
+    // =========================================================================
+    function cleanNorm(val) {
+      return String(val ?? "").trim().toLowerCase();
+    }
+
+    function lookupBookReadStatus(book, litMap) {
+      const bId = cleanNorm(book?.ID_Book ?? book?.Book_ID ?? book?.id_book);
+      const bTitle = cleanNorm(book?.Title_Book ?? book?.["Tên sách"]);
+      if (bId && litMap.has(bId)) return litMap.get(bId);
+      if (bTitle && litMap.has("title:" + bTitle)) return litMap.get("title:" + bTitle);
+      return null;
+    }
+
+    function getReaderSubmissions() {
+      if (!currentReader) return [];
+      const readerKeys = new Set([
+        cleanNorm(currentReader.ID_Reader),
+        cleanNorm(currentReader.User_Name),
+        cleanNorm(currentReader.Full_Name)
+      ].filter(Boolean));
+
+      return (appDb.REPORT_SUBMISSIONS || []).filter(s => {
+        const sReaderId = cleanNorm(s.ID_Reader ?? s.Reader_ID ?? s.id_reader);
+        const sUserName = cleanNorm(s.User_Name ?? s.Full_Name ?? s.Reader_Name);
+        return (sReaderId && readerKeys.has(sReaderId)) || (sUserName && readerKeys.has(sUserName));
+      });
+    }
+
+    function getLitBooksMap() {
+      const map = new Map();
+      getReaderSubmissions().forEach(sub => {
+        const bId = cleanNorm(sub.ID_Book ?? sub.Book_ID ?? sub.id_book);
+        const bTitle = cleanNorm(sub.Title_Book ?? sub.Book_Title ?? sub["Tên sách"]);
+        const score = Number(sub.Total_Score ?? sub.Score ?? 0);
+        const coins = Number(sub.Bcoins_Awarded ?? sub.Bcoins ?? 0);
+
+        const upsert = (key) => {
+          if (!key) return;
+          if (!map.has(key)) {
+            map.set(key, { bestScore: score, totalCoins: coins, count: 1 });
+          } else {
+            const cur = map.get(key);
+            cur.bestScore = Math.max(cur.bestScore, score);
+            cur.totalCoins += coins;
+            cur.count += 1;
+          }
+        };
+
+        if (bId) upsert(bId);
+        if (bTitle) upsert("title:" + bTitle);
+      });
+      return map;
+    }
+
+    function renderFootprintBooks() {
+      const container = document.getElementById("footprintBooksList");
+      const litMap = getLitBooksMap();
+      const catFilter = document.getElementById("categorySelect").value;
+
+      // Chuẩn hóa Sequence_Order (hỗ trợ YYYY-MM-DD như 2026-01-01 hoặc số thứ tự)
+      const getSeqSortKey = (book) => {
+        const raw = book.Sequence_Order ?? book.sequence_order ?? book.Order ?? book.STT ?? "";
+        const str = String(raw).trim();
+        if (!str) return "9999-99-99";
+        const isoMatch = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+        if (isoMatch) {
+          return `${isoMatch[1]}-${isoMatch[2].padStart(2, "0")}-${isoMatch[3].padStart(2, "0")}`;
+        }
+        return str;
+      };
+
+      const sortedBooks = [...appDb.BOOKS].sort((a, b) => {
+        const cmp = getSeqSortKey(a).localeCompare(getSeqSortKey(b), "vi", { numeric: true });
+        if (cmp !== 0) return cmp;
+        return String(a.ID_Book || "").localeCompare(String(b.ID_Book || ""), "vi", { numeric: true });
+      });
+
+      const filtered = sortedBooks.filter(book => {
+        const isLit = Boolean(lookupBookReadStatus(book, litMap));
+        if (bookStatusFilter === "LIT" && !isLit) return false;
+        if (bookStatusFilter === "UNLIT" && isLit) return false;
+        const cat = String(book["Thể loại"] || book.Book_Type || "").trim();
+        if (catFilter !== "ALL" && cat !== catFilter) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-center text-xs text-gray-500 py-8 font-bold">Không có cuốn sách nào trong sheet BOOKS phù hợp bộ lọc.</p>`;
+        return;
+      }
+
+      const zigZagAligns = ["justify-start pr-5", "justify-end pl-5", "justify-center px-2"];
+
+      container.innerHTML = filtered.map((book, idx) => {
+        const bId = String(book.ID_Book || `B${idx + 1}`).trim();
+        const title = String(book.Title_Book || book["Tên sách"] || "Chưa có tên").trim();
+        const cat = String(book["Thể loại"] || book.Book_Type || "Khác").trim();
+        const lvl = String(book.Level_Reader || "L1").trim();
+        const rawSeq = String(book.Sequence_Order ?? "").trim();
+        const seqDisplay = rawSeq ? rawSeq.slice(0, 10) : String(idx + 1);
+
+        const litInfo = lookupBookReadStatus(book, litMap);
+        const isLit = Boolean(litInfo);
+        const alignClass = zigZagAligns[idx % zigZagAligns.length];
+
+        return `
+          <div class="flex ${alignClass}">
+            <div onclick='openBookReportModal(${JSON.stringify(book).replace(/'/g, "&#39;")})'
+              class="paw-card cursor-pointer w-full max-w-[300px] p-3 rounded-3xl ${isLit ? "book-lit" : "book-unlit"}">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-11 h-11 rounded-2xl bg-white border-2 border-storybook-vintageNavy flex flex-col items-center justify-center shrink-0 shadow-sketchSm">
+                  <span class="text-base leading-none">${isLit ? "🐾" : "👣"}</span>
+                  <span class="text-[9px] font-extrabold text-amber-800 mt-0.5">#${idx + 1}</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-white border border-storybook-vintageNavy">${escapeHtml(bId)}</span>
+                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-storybook-skyLight border border-storybook-vintageNavy">${escapeHtml(cat)}</span>
+                    <span class="text-[9px] font-bold text-gray-600">· ${escapeHtml(lvl)}</span>
+                  </div>
+                  <h4 class="font-display font-bold text-xs text-storybook-vintageNavy leading-snug mt-1 line-clamp-2">
+                    ${escapeHtml(title)}
+                  </h4>
+                </div>
+              </div>
+              <div class="mt-2 pt-1.5 border-t border-storybook-vintageNavy/20 flex justify-between items-center text-[10px]">
+                <span class="font-mono text-gray-600">Sequence: ${escapeHtml(seqDisplay)}</span>
+                ${
+                  isLit
+                    ? `<span class="bg-storybook-sageDark text-white font-bold px-2 py-0.5 rounded-full border border-storybook-vintageNavy">✨ Đã đọc (${litInfo.bestScore}đ)</span>`
+                    : `<span class="bg-gray-300 text-gray-700 font-bold px-2 py-0.5 rounded-full border border-gray-500">⬜ Viết Report</span>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
   </script>
 
